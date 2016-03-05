@@ -10,7 +10,7 @@ public class Receipt {
 	private Double amount;
 	private Company company;
 	
-	Receipt (Integer receiptId, Date dateOfIssue, String category, Double amount, Company company) {
+	public Receipt (Integer receiptId, Date dateOfIssue, String category, Double amount, Company company) {
 		
 		this.receiptId = receiptId;
 		this.dateOfIssue = dateOfIssue;
@@ -18,7 +18,8 @@ public class Receipt {
 		this.amount = amount;
 		this.company = company;
 	}
-
+	
+	// Getters and Setters:
 	public Integer getReceiptId() {
 		return receiptId;
 	}
