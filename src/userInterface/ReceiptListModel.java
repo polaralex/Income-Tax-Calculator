@@ -22,8 +22,8 @@ public class ReceiptListModel extends AbstractListModel<String> {
 		
 		Receipt currentReceipt = myArrayList.get(index);
 		
-		String basicData = "Id: "+currentReceipt.getReceiptId().toString() +
-				"\n"+ currentReceipt.getAmount().toString() + " $\n" + currentReceipt.getCompany().getName();
+		String basicData = currentReceipt.getReceiptId().toString() +
+				": "+ currentReceipt.getAmount().toString() + "$ at " + currentReceipt.getCompany().getName();
 
 		return basicData;
 	}
@@ -43,6 +43,17 @@ public class ReceiptListModel extends AbstractListModel<String> {
     		myArrayList.add(receiptList.get(i));
     	}
         fireContentsChanged(this, 0, getSize());
-        
     }
+
+	public void removeItem(int indexOfElement) {
+		
+		Receipt selectedReceipt = myArrayList.get(indexOfElement);
+	    
+		Boolean removed = myArrayList.remove(selectedReceipt);
+		if (removed) {
+			fireContentsChanged(this, 0, getSize());
+		}
+		
+		fireIntervalRemoved( selectedReceipt, 0, getSize() );
+	}
 }

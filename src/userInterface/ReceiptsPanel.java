@@ -1,17 +1,12 @@
 package userInterface;
 
 import java.awt.Color;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-
 import dataManagement.Receipt;
 
 public class ReceiptsPanel extends JPanel implements ActionListener {
@@ -45,11 +40,24 @@ public class ReceiptsPanel extends JPanel implements ActionListener {
 	public ReceiptListModel getModel () {
 		return model;
 	}
+	
+	public JList<String> getJList () {
+		return list;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		// Do nothing (yet).
 	}
 
+	public Boolean isAnyListCellSelected() {
+		
+		return !(list.isSelectionEmpty());
+	}
+
+	public void deleteSelectedCell() {
+		
+		model.removeItem(list.getSelectedIndex());
+		
+	}
 }

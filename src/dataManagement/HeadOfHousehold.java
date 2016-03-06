@@ -6,6 +6,10 @@ public class HeadOfHousehold extends Person {
 		super(firstName, lastName, identifyingNumber, income);
 	}
 	
+	public HeadOfHousehold() {
+		super();
+	}
+	
 public Double calculateTaxBeforeReceipts() {
 		
 		Double income = getIncome();

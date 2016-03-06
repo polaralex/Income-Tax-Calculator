@@ -5,6 +5,10 @@ public class Single extends Person {
 	public Single(String firstName, String lastName, Integer identifyingNumber, Object income) {
 		super(firstName, lastName, identifyingNumber, income);
 	}
+	
+	public Single() {
+		super();
+	}
 
 	public Double calculateTaxBeforeReceipts() {
 		

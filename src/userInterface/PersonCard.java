@@ -40,6 +40,7 @@ public class PersonCard extends JFrame implements ActionListener {
 	private JButton buttonSaveChanges;
 	private JButton buttonClose;
 	private JButton buttonAddReceipt;
+	private JButton buttonDeleteReceipt;
 	private JTextArea textId;
 	private JTextArea textAreaName;
 	private JTextArea textAreaSurname;
@@ -91,8 +92,10 @@ public class PersonCard extends JFrame implements ActionListener {
 		buttonSaveChanges.addActionListener(this);
 		buttonClose = new JButton("Close");
 		buttonClose.addActionListener(this);
-		buttonAddReceipt = new JButton("Add Receipt");
+		buttonAddReceipt = new JButton("Add");
 		buttonAddReceipt.addActionListener(this);
+		buttonDeleteReceipt = new JButton("Delete");
+		buttonDeleteReceipt.addActionListener(this);
 
 		// Person placeholder image initialization:
 		BufferedImage myPicture = null;
@@ -142,8 +145,9 @@ public class PersonCard extends JFrame implements ActionListener {
 		addGridItem(panel, wrapperIncome, 2, 2, 2, 1, GridBagConstraints.EAST);
 		addGridItem(panel, wrapperId, 2, 3, 2, 1, GridBagConstraints.EAST);
 		
-		addGridItem(panel, scrollReceiptsPanel, 4, 0, 1, 3, GridBagConstraints.SOUTH);
-		addGridItem(panel, buttonAddReceipt, 4, 3, 1, 2, GridBagConstraints.NORTH);
+		addGridItem(panel, scrollReceiptsPanel, 4, 0, 2, 3, GridBagConstraints.SOUTH);
+		addGridItem(panel, buttonAddReceipt, 4, 3, 1, 2, GridBagConstraints.NORTHWEST);
+		addGridItem(panel, buttonDeleteReceipt, 5, 3, 1, 2, GridBagConstraints.NORTHEAST);
 		
 		addGridItem(panel, buttonSaveChanges, 0, 4, 1, 1, GridBagConstraints.CENTER);
 		addGridItem(panel, buttonClose, 1, 4, 1, 2, GridBagConstraints.CENTER);
@@ -164,13 +168,24 @@ public class PersonCard extends JFrame implements ActionListener {
 			
 			updatePersonData();
 			
-			JOptionPane.showMessageDialog(
-					PersonCard.this, "The Person Data were Updated.", "Person Card", JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(
+			//		PersonCard.this, "The Person Data were Updated.", "Person Card", JOptionPane.INFORMATION_MESSAGE);
+			
+			this.dispose();
 			
 		} else if ( e.getSource() == buttonClose ) {
+			
 			this.dispose();
+			
 		} else if ( e.getSource() == buttonAddReceipt ) {
+			
 			AddReceiptScreen addReceiptScreen = new AddReceiptScreen(receiptsPanel.getModel());
+			
+		} else if ( e.getSource() == buttonDeleteReceipt ) {
+			
+			if ( receiptsPanel.isAnyListCellSelected() == true ){
+				receiptsPanel.deleteSelectedCell();
+			}
 		}
 	}
 	

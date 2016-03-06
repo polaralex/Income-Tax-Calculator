@@ -41,6 +41,7 @@ public class PeopleManager {
 	public ArrayList<Person> getPersonList () {
 
 		return personList;
+		
 	}
 	
 	public ArrayList<Person> getPersonListOnlyNames () {
@@ -52,6 +53,53 @@ public class PeopleManager {
 		}
 
 		return tempList;
+	}
+	
+	public Person createNewPerson (int category, String firstName, String lastName, Integer identifyingNumber, Double income){
+	
+		if (category == Person.MARRIED_FILING_JOINTLY) {
+			 return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
+		} else if (category == Person.MARRIED_FILING_SEPERATELY) {
+			return(new MarriedFilingSeperately(firstName, lastName, identifyingNumber, income));
+		} else if (category == Person.HEAD_OF_HOUSEHOLD) {
+			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income));
+		} else if (category == Person.SINGLE) {
+			return(new Single(firstName, lastName, identifyingNumber, income));
+		}
+		
+		return null;
+		
+	}
+	
+	public Person createNewPerson (String category, String firstName, String lastName, Integer identifyingNumber, Double income){
+		
+		if (category == "Married Filing Jointly") {
+			 return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
+		} else if (category == "Married Filing Seperately") {
+			return(new MarriedFilingSeperately(firstName, lastName, identifyingNumber, income));
+		} else if (category == "Head of Household") {
+			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income));
+		} else if (category == "Single") {
+			return(new Single(firstName, lastName, identifyingNumber, income));
+		}
+		
+		return null;
+		
+	}
+	
+	public Person createNewPerson (int category) {
+		
+		if (category == Person.MARRIED_FILING_JOINTLY) {
+			 return(new MarriedFilingJointly());
+		} else if (category == Person.MARRIED_FILING_SEPERATELY) {
+			return(new MarriedFilingSeperately());
+		} else if (category == Person.HEAD_OF_HOUSEHOLD) {
+			return(new HeadOfHousehold());
+		} else if (category == Person.SINGLE) {
+			return(new Single());
+		}
+		
+		return null;
 	}
 		
 }

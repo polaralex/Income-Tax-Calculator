@@ -6,6 +6,10 @@ public class MarriedFilingJointly extends Person {
 		super(firstName, lastName, identifyingNumber, income);
 	}
 	
+	public MarriedFilingJointly() {
+		super();
+	}
+	
 public Double calculateTaxBeforeReceipts() {
 		
 		Double income = getIncome();

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,7 +28,9 @@ public class AddReceiptScreen extends JFrame implements ActionListener {
 	private JTextField idInput;
 	private JTextField amountInput;
 	private JTextField companyInput;
-	private JTextField categoryInput;
+	//private JTextField categoryInput;
+	private JComboBox<String> categoryInput;
+	private String[] categories = { "Basic", "Entertainment", "Travel", "Health", "Other" };
 	private ReceiptListModel receiptsListModel;
 	
 	AddReceiptScreen(ReceiptListModel receiptListModel) {
@@ -43,14 +46,15 @@ public class AddReceiptScreen extends JFrame implements ActionListener {
 		
 		explainAction = new JLabel("Enter the Data for a New Receipt:");
 		JLabel idLabel = new JLabel("Id: ");
-		idInput = new JTextField();
+		// Present the user with an "optional" randomly generated receipt id-number:
+		idInput = new JTextField(String.valueOf((int)(Math.random() * ( 1000000 - 0 ))));
 		JLabel amountLabel = new JLabel("Amount: ");
 		amountInput = new JTextField();
 		JLabel companyLabel = new JLabel("Company: ");
 		companyInput = new JTextField();
 		JLabel categoryLabel = new JLabel("Category: ");
-		categoryInput = new JTextField();
-
+		categoryInput = new JComboBox<String>(categories);
+		
 		okButton = new JButton("OK");
 		okButton.addActionListener(this);
 		cancelButton = new JButton("Cancel");
@@ -82,13 +86,16 @@ public class AddReceiptScreen extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if ( e.getSource() == okButton ){
+			
 			Date date = new Date();
 			Company company = new Company(companyInput.getText(), "no address");
-			receiptsListModel.addElement(new Receipt(Integer.valueOf(idInput.getText()), date, categoryInput.getText(), Double.valueOf(amountInput.getText()), company));
+			receiptsListModel.addElement(new Receipt(Integer.valueOf(idInput.getText()), date, (String)categoryInput.getSelectedItem(), Double.valueOf(amountInput.getText()), company));
+			this.dispose();
+			
+		} else if ( e.getSource() == cancelButton ) {
 			
 			this.dispose();
-		} else if ( e.getSource() == cancelButton ) {
-			this.dispose();
+			
 		}
 	}
 	

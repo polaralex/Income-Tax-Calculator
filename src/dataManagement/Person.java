@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 public abstract class Person {
 	
+	public static final int MARRIED_FILING_JOINTLY = 1;
+	public static final int MARRIED_FILING_SEPERATELY = 2;
+	public static final int HEAD_OF_HOUSEHOLD = 3;
+	public static final int SINGLE = 4;
+	
 	private String firstName;
 	private String lastName;
 	private Integer identifyingNumber;
@@ -20,6 +25,13 @@ public abstract class Person {
 		} else {
 			this.income = (Double)income;
 		}
+	}
+	
+	public Person () {
+		this.firstName = "";
+		this.lastName = "";
+		this.identifyingNumber = (int)(Math.random() * ( 10000 - 0 ));
+		this.income = 0d;
 	}
 	
 	// Abstract Functions:

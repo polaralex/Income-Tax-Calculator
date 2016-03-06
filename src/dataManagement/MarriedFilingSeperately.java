@@ -5,6 +5,10 @@ public class MarriedFilingSeperately extends Person {
 	MarriedFilingSeperately(String firstName, String lastName, Integer identifyingNumber, Object income) {
 		super(firstName, lastName, identifyingNumber, income);
 	}
+	
+	public MarriedFilingSeperately() {
+		super();
+	}
 
 public Double calculateTaxBeforeReceipts() {
 		

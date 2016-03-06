@@ -14,9 +14,19 @@ public class Receipt {
 		
 		this.receiptId = receiptId;
 		this.dateOfIssue = dateOfIssue;
-		this.category = category;
+		this.category = getCorrectCategory(category);
 		this.amount = amount;
 		this.company = company;
+	}
+	
+	// Functions:
+	private String getCorrectCategory (String category) {
+		
+		if ( category != "Basic" && category != "Entertainment" && category != "Travel" && category != "Health" && category != "Other") {
+			return "Other";
+		} else {
+			return category;
+		}
 	}
 	
 	// Getters and Setters:
@@ -41,7 +51,7 @@ public class Receipt {
 	}
 
 	public void setCategory(String category) {
-		this.category = category;
+		this.category = getCorrectCategory(category);
 	}
 
 	public Double getAmount() {
@@ -59,6 +69,5 @@ public class Receipt {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
 	
 }

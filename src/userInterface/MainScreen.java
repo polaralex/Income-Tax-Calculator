@@ -1,50 +1,30 @@
 package userInterface;
 
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-
-import javax.swing.AbstractAction;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.GroupLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
-import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
-
 import dataManagement.PeopleManager;
 import dataManagement.Person;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-
 import javax.swing.JList;
-import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import javax.swing.GroupLayout.Alignment.*;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
@@ -57,6 +37,7 @@ public class MainScreen {
 	private JButton buttonImportPerson;
 	private JButton buttonCreatePerson;
 	private JButton buttonClose;
+	private String[] personTypes = { "Married Filing Jointly", "Married Filing Seperately", "Head of Household", "Single" };
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -84,15 +65,27 @@ public class MainScreen {
 		
 		JPanel panel = new JPanel();
 		frame.add(panel);
-		
 		panel.setLayout( new GridBagLayout() );
+		
+		frame.addWindowFocusListener(new WindowFocusListener() {
+
+			@Override
+			public void windowGainedFocus(WindowEvent e) {
+				frame.repaint();
+				frame.revalidate();
+			}
+
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				
+			}
+		});
 		
 		// Top Description Text:
 		txtpnUseTheopen = new JTextArea();
 		txtpnUseTheopen.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		txtpnUseTheopen.setEditable(false);
-		txtpnUseTheopen.setLineWrap(true);
-		txtpnUseTheopen.setText("Use the \"Open File\" to Import a new Database of Tax Data.");
+		txtpnUseTheopen.setText("List of People and Tax Data:");
 		
 		// People Manager Initialization:
 		final PeopleManager peopleManager = new PeopleManager();
@@ -104,17 +97,14 @@ public class MainScreen {
 		model = new PersonListModel();
 		list.setModel(model);
 		model.addAll(peopleManager.getPersonList());
-		//list.setBackground(new Color(159,180,204));
 
 		scrollPane = new JScrollPane(list);
 		scrollPane.setMinimumSize(new Dimension(400,400));
 		
-		// Grid Bag Layout Configuration:
+		// Main Screen Layout Configuration:
 		addGridItem(panel, txtpnUseTheopen, 0, 0, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0.5f);
-		
 		addGridItem(panel, scrollPane, 0, 1, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 1.0f);
 		
-		// Buttons Layout Setting:
 		buttonCreatePerson = new JButton("New");
 		buttonImportPerson = new JButton("Import");
 		buttonClose = new JButton("Close");
@@ -122,7 +112,21 @@ public class MainScreen {
 		ActionListener buttonListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				if ( e.getSource() == buttonCreatePerson ) {
+					
+					String category = (String)JOptionPane.showInputDialog( frame, "Choose the type of Tax-Payer:", "Create a new Person", JOptionPane.PLAIN_MESSAGE, null, personTypes, personTypes[0]);
+					
+					// Finds the index of the selected category:
+					int i=0;
+					while (personTypes[i] != category && i < personTypes.length){
+						i++;
+					}
+
+					Person newPerson = peopleManager.createNewPerson(i);
+					PersonCard createPerson = new PersonCard(newPerson);
+					model.addElement(newPerson);
+					createPerson.showCard();
 					
 				} else if ( e.getSource() == buttonImportPerson ) {
 					
