@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public abstract class Person {
 	
+	// Constants for children-types initialization:
 	public static final int MARRIED_FILING_JOINTLY = 1;
 	public static final int MARRIED_FILING_SEPERATELY = 2;
 	public static final int HEAD_OF_HOUSEHOLD = 3;
@@ -36,6 +37,7 @@ public abstract class Person {
 	
 	// Abstract Functions:
 	public abstract Double calculateTaxBeforeReceipts();
+	public abstract String getPersonType();
 	
 	// Functions:
 	public Double calculateTax() {
@@ -65,7 +67,7 @@ public abstract class Person {
 		
 		return (receiptsAmount);
 	}
-	
+		
 	// Getters and Setters:
 	public String getFirstName() {
 		return firstName;
@@ -98,6 +100,5 @@ public abstract class Person {
 	
 	public ArrayList<Receipt> getReceiptsList () {
 		return receipts;
-	}
-	
+	}	
 }

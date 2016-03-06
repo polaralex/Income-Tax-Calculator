@@ -33,7 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.border.TitledBorder;
 
-public class PersonCard extends JFrame implements ActionListener {
+public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	
 	private Person person;
 	
@@ -45,6 +45,7 @@ public class PersonCard extends JFrame implements ActionListener {
 	private JTextArea textAreaName;
 	private JTextArea textAreaSurname;
 	private JTextArea textIncome;
+	private JLabel personTypeLabel;
 	
 	private ReceiptsPanel receiptsPanel;
 	
@@ -60,15 +61,14 @@ public class PersonCard extends JFrame implements ActionListener {
 	public void showCard() {
 		
 		this.setTitle("Tax-Income Calculator");
-		this.setMinimumSize(new Dimension(600,400));
+		this.setMinimumSize(new Dimension(750,400));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.addWindowFocusListener(new WindowFocusListener() {
 			
 			@Override
 			public void windowLostFocus(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
+				// Do nothing (yet).
 			}
 			
 			@Override
@@ -80,12 +80,14 @@ public class PersonCard extends JFrame implements ActionListener {
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-
+		
 		// Get text-field Strings from the Person Object:
 		textId = new JTextArea(person.getIdentifyingNumber().toString());
 		textAreaName = new JTextArea(person.getFirstName());
 		textAreaSurname = new JTextArea(person.getLastName());
 		textIncome = new JTextArea(person.getIncome().toString());
+		personTypeLabel = new JLabel("Category: "+ person.getPersonType());
+		personTypeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		
 		// Buttons Initialization:
 		buttonSaveChanges = new JButton("Save");
@@ -139,7 +141,8 @@ public class PersonCard extends JFrame implements ActionListener {
 		scrollReceiptsPanel.setMinimumSize(new Dimension(100, 120));
 		scrollReceiptsPanel.setViewportView(receiptsPanel);
 		
-		addGridItem(panel, picLabel, 0, 0, 2, 3, GridBagConstraints.CENTER);
+		addGridItem(panel, personTypeLabel, 0, 0, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, picLabel, 0, 1, 2, 2, GridBagConstraints.CENTER);
 		addGridItem(panel, wrapperName, 2, 0, 2, 1, GridBagConstraints.EAST);
 		addGridItem(panel, wrapperSurname, 2, 1, 2, 1, GridBagConstraints.EAST);
 		addGridItem(panel, wrapperIncome, 2, 2, 2, 1, GridBagConstraints.EAST);
@@ -167,10 +170,6 @@ public class PersonCard extends JFrame implements ActionListener {
 		if ( e.getSource() == buttonSaveChanges ) {
 			
 			updatePersonData();
-			
-			//JOptionPane.showMessageDialog(
-			//		PersonCard.this, "The Person Data were Updated.", "Person Card", JOptionPane.INFORMATION_MESSAGE);
-			
 			this.dispose();
 			
 		} else if ( e.getSource() == buttonClose ) {
@@ -194,23 +193,6 @@ public class PersonCard extends JFrame implements ActionListener {
 		person.setLastName(textAreaSurname.getText());
 		person.setIncome( Double.valueOf(textIncome.getText()) );
 		person.setIdentifyingNumber( Integer.valueOf(textId.getText()) );
-	}
-	
-	private void addGridItem(JPanel panel, JComponent comp,
-	        int x, int y, int width, int height, int align) {
-		
-	    GridBagConstraints gcon = new GridBagConstraints();
-	    gcon.gridx = x;
-	    gcon.gridy = y;
-	    gcon.gridwidth = width;
-	    gcon.gridheight = height;
-	    gcon.weightx = 0.5;       // a hint on apportioning space
-	    gcon.weighty = 0.5;
-	    gcon.insets = new Insets(5, 5, 5, 5);   // padding
-	    gcon.anchor = align;    // applies if fill is NONE
-	    gcon.fill = GridBagConstraints.HORIZONTAL;
-	    
-	    panel.add(comp, gcon);
 	}
 
 	public void hideCard() {

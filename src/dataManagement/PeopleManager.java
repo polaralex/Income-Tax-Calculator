@@ -24,35 +24,19 @@ public class PeopleManager {
 		
 		// Create Receipt Objects and add them to people:
 		Date date = new Date();
-		personList.get(1).addReceipt(new Receipt(1, date, "Super Market", 55d, new Company("Basilopoulos","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(2, date, "Petrol", 120d, new Company("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(5, date, "Petrol", 100d, new Company("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(6, date, "Tolls", 10d, new Company("Attiki Odos","Athens")));
-		personList.get(1).addReceipt(new Receipt(7, date, "Petrol", 100d, new Company("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(8, date, "Super Market", 100d, new Company("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(9, date, "Super Market", 100d, new Company("Shell","Ioannina")));
-
-		personList.get(2).addReceipt(new Receipt(3, date, "Super Market", 55d, new Company("Basilopoulos","Ioannina")));
-		personList.get(3).addReceipt(new Receipt(4, date, "Super Market", 55d, new Company("Basilopoulos","Ioannina")));
-
-		System.out.println("Test Create Persons Done!\n\n");
+		personList.get(1).addReceipt(new Receipt(1, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(2, date, "Travel", 120d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(5, date, "Travel", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(6, date, "Travel", 10d, companyCreator("Attiki Odos","Athens")));
+		personList.get(1).addReceipt(new Receipt(7, date, "Travel", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(8, date, "Basic", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(9, date, "Health", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(2).addReceipt(new Receipt(3, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
+		personList.get(3).addReceipt(new Receipt(4, date, "Other", 55d, companyCreator("Basilopoulos","Ioannina")));
 	}
 	
 	public ArrayList<Person> getPersonList () {
-
 		return personList;
-		
-	}
-	
-	public ArrayList<Person> getPersonListOnlyNames () {
-		
-		ArrayList tempList = new ArrayList();
-		
-		for(int i=0; i<personList.size(); i++){
-			tempList.add(personList.get(i).getFirstName()+" "+personList.get(i).getLastName());
-		}
-
-		return tempList;
 	}
 	
 	public Person createNewPerson (int category, String firstName, String lastName, Integer identifyingNumber, Double income){
@@ -87,10 +71,26 @@ public class PeopleManager {
 		
 	}
 	
+	public Company companyCreator(String name, String address) {
+		
+		if (Company.allCompaniesList != null ) {
+			ArrayList<Company> companyList = Company.allCompaniesList;
+			
+			for (int i=0; i<companyList.size(); i++) {
+				if ( (companyList.get(i).getName() == name) && (companyList.get(i).getAddress() == address) ) {
+					return companyList.get(i);
+				}
+			}
+		}
+		
+		return ( new Company(name, address) );
+	}
+	
 	public Person createNewPerson (int category) {
 		
 		if (category == Person.MARRIED_FILING_JOINTLY) {
-			 return(new MarriedFilingJointly());
+			System.out.println("Did this");
+			return(new MarriedFilingJointly());
 		} else if (category == Person.MARRIED_FILING_SEPERATELY) {
 			return(new MarriedFilingSeperately());
 		} else if (category == Person.HEAD_OF_HOUSEHOLD) {
@@ -101,5 +101,4 @@ public class PeopleManager {
 		
 		return null;
 	}
-		
 }

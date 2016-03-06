@@ -2,6 +2,7 @@ package userInterface;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import dataManagement.PeopleManager;
 import dataManagement.Person;
@@ -13,7 +14,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,18 +23,16 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import javax.swing.JButton;
-import javax.swing.JComponent;
 
-public class MainScreen {
+public class MainScreen extends GridBagBasedScreen {
 
 	private JFrame frame;
-	private JTextArea txtpnUseTheopen;
+	private JLabel mainLabelText;
 	private JScrollPane scrollPane;
 	private PersonListModel model;
 	private JButton buttonImportPerson;
+	private JButton buttonExport;
 	private JButton buttonCreatePerson;
 	private JButton buttonClose;
 	private String[] personTypes = { "Married Filing Jointly", "Married Filing Seperately", "Head of Household", "Single" };
@@ -82,10 +80,8 @@ public class MainScreen {
 		});
 		
 		// Top Description Text:
-		txtpnUseTheopen = new JTextArea();
-		txtpnUseTheopen.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		txtpnUseTheopen.setEditable(false);
-		txtpnUseTheopen.setText("List of People and Tax Data:");
+		mainLabelText = new JLabel("List of People and Tax Data:");
+		mainLabelText.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		
 		// People Manager Initialization:
 		final PeopleManager peopleManager = new PeopleManager();
@@ -102,11 +98,12 @@ public class MainScreen {
 		scrollPane.setMinimumSize(new Dimension(400,400));
 		
 		// Main Screen Layout Configuration:
-		addGridItem(panel, txtpnUseTheopen, 0, 0, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0.5f);
-		addGridItem(panel, scrollPane, 0, 1, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 1.0f);
+		addGridItem(panel, mainLabelText, 0, 0, 4, 1, GridBagConstraints.CENTER, GridBagConstraints.CENTER, 0.5f);
+		addGridItem(panel, scrollPane, 0, 1, 4, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 1.0f);
 		
 		buttonCreatePerson = new JButton("New");
 		buttonImportPerson = new JButton("Import");
+		buttonExport = new JButton("Export");
 		buttonClose = new JButton("Close");
 		
 		ActionListener buttonListener = new ActionListener() {
@@ -115,15 +112,16 @@ public class MainScreen {
 				
 				if ( e.getSource() == buttonCreatePerson ) {
 					
-					String category = (String)JOptionPane.showInputDialog( frame, "Choose the type of Tax-Payer:", "Create a new Person", JOptionPane.PLAIN_MESSAGE, null, personTypes, personTypes[0]);
+					Object category = (String)JOptionPane.showInputDialog(frame, "Choose the type of Tax-Payer:", "Create a new Person", JOptionPane.PLAIN_MESSAGE, null, personTypes, personTypes[0]);					
+					System.out.println(category);
 					
 					// Finds the index of the selected category:
 					int i=0;
-					while (personTypes[i] != category && i < personTypes.length){
+					while (personTypes[i] != category.toString() && i < personTypes.length){
 						i++;
 					}
 
-					Person newPerson = peopleManager.createNewPerson(i);
+					Person newPerson = peopleManager.createNewPerson(i+1);
 					PersonCard createPerson = new PersonCard(newPerson);
 					model.addElement(newPerson);
 					createPerson.showCard();
@@ -143,41 +141,25 @@ public class MainScreen {
 
 		addGridItem(panel, buttonCreatePerson, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
 		addGridItem(panel, buttonImportPerson, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
-		addGridItem(panel, buttonClose, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
+		addGridItem(panel, buttonExport, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
+		addGridItem(panel, buttonClose, 3, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
 
 		MouseListener mouseListener = new MouseAdapter() {
-		      public void mouseClicked(MouseEvent mouseEvent) {
-		        JList theList = (JList) mouseEvent.getSource();
+			public void mouseClicked(MouseEvent mouseEvent) {
+				JList theList = (JList) mouseEvent.getSource();
 		        if (mouseEvent.getClickCount() == 2) {
 		          int index = theList.locationToIndex(mouseEvent.getPoint());
-		          if (index >= 0) {
-		            Object selectedObject = theList.getModel().getElementAt(index);
-		            System.out.println("Double-clicked on: " + selectedObject.toString());
-		            
-		            PersonCard personCard = new PersonCard(peopleManager.getPersonList().get(index));
-		            personCard.showCard();
+		          if (index >= 0 && index < theList.getModel().getSize()) {
+		            Person selectedObject = ((PersonListModel) theList.getModel()).getPersonAt(index);
+		            if (selectedObject != null) {
+		            	PersonCard personCard = new PersonCard(selectedObject);
+		            	personCard.showCard();
+		            }
 		          }
 		        }
 		      }
 		};
 		    
 		list.addMouseListener(mouseListener);
-		
-	}
-	
-	private void addGridItem(JPanel panel, JComponent comp, int x, int y, int width, int height, int align, int fill, float weighty) {
-		
-	    GridBagConstraints gcon = new GridBagConstraints();
-	    gcon.gridx = x;
-	    gcon.gridy = y;
-	    gcon.gridwidth = width;
-	    gcon.gridheight = height;
-	    gcon.weightx = 0.5;       // a hint on apportioning space
-	    gcon.weighty = weighty;
-	    gcon.insets = new Insets(5, 5, 5, 5);   // padding
-	    gcon.anchor = align;    // applies if fill is NONE
-	    gcon.fill = fill;
-	    
-	    panel.add(comp, gcon);
 	}
 }

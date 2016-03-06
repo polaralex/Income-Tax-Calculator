@@ -36,4 +36,9 @@ public class Single extends Person {
 		
 		}
 	}
+	
+	@Override
+	public String getPersonType() {
+		return ("Single");
+	}
 }

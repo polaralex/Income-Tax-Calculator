@@ -10,7 +10,7 @@ public class MarriedFilingJointly extends Person {
 		super();
 	}
 	
-public Double calculateTaxBeforeReceipts() {
+	public Double calculateTaxBeforeReceipts() {
 		
 		Double income = getIncome();
 		
@@ -35,5 +35,10 @@ public Double calculateTaxBeforeReceipts() {
 			return ( 18197.69 + 0.0985*(income - 254240) );
 		
 		}
+	}
+
+	@Override
+	public String getPersonType() {
+		return ("Married Filing Jointly");
 	}
 }

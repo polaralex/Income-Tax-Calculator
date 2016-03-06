@@ -36,4 +36,9 @@ public Double calculateTaxBeforeReceipts() {
 		
 		}
 	}
+
+	@Override
+	public String getPersonType() {
+		return ("Head of Household");
+	}
 }

@@ -48,4 +48,8 @@ public class PersonListModel extends AbstractListModel<String> {
         fireContentsChanged(this, 0, getSize());
         
     }
+    
+    public Person getPersonAt(int index) {
+    	return (myArrayList.get(index));
+    }
 }

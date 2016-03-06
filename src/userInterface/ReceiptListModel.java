@@ -33,10 +33,6 @@ public class ReceiptListModel extends AbstractListModel<String> {
         fireIntervalAdded(this, myArrayList.size()-1, myArrayList.size()-1);
     }
     
-    public void updateElement(int position, String firstName, String lastName, Integer identifyingNumber, Double income) {
-    	// Not implemented.
-    }
-    
     public void addAll(ArrayList<Receipt> receiptList) {
         
     	for(int i=0; i<receiptList.size(); i++) {
