@@ -51,18 +51,16 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	
 	public PersonCard(Person person) {
 		this.person = person;
-		initialize();
-	}
-
-	private void initialize() {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		showCard();
 	}
 	
 	public void showCard() {
 		
-		this.setTitle("Tax-Income Calculator");
-		this.setMinimumSize(new Dimension(750,400));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setBounds(150, 150, 750, 400);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setMinimumSize(new Dimension(750,400));
+		this.setTitle("Tax-Income Calculator");
 		
 		this.addWindowFocusListener(new WindowFocusListener() {
 			
@@ -103,7 +101,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		BufferedImage myPicture = null;
 		
 		try {
-			myPicture = ImageIO.read(new File("src/res/icon-user-small.png"));
+			myPicture = ImageIO.read(getClass().getResourceAsStream("/res/icon-user-small.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

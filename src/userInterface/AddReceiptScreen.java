@@ -34,8 +34,10 @@ public class AddReceiptScreen extends GridBagBasedScreen implements ActionListen
 		this.receiptsListModel = receiptListModel;
 		
 		this.setTitle("Add a new Receipt");
+		this.setBounds(200, 200, 500, 300);
 		this.setMinimumSize(new Dimension(500,300));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		this.add(panel);

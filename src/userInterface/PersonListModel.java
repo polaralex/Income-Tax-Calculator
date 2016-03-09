@@ -3,6 +3,7 @@ package userInterface;
 import java.util.ArrayList;
 import javax.swing.AbstractListModel;
 import dataManagement.Person;
+import dataManagement.Receipt;
 
 public class PersonListModel extends AbstractListModel<String> {
 	
@@ -29,6 +30,18 @@ public class PersonListModel extends AbstractListModel<String> {
         myArrayList.add(obj);
         fireIntervalAdded(this, myArrayList.size()-1, myArrayList.size()-1);
     }
+    
+    public void removeItem(int indexOfElement) {
+		
+		Person selectedReceipt = myArrayList.get(indexOfElement);
+	    
+		Boolean removed = myArrayList.remove(selectedReceipt);
+		if (removed) {
+			fireContentsChanged(this, 0, getSize());
+		}
+		
+		fireIntervalRemoved( selectedReceipt, 0, getSize() );
+	}
     
     public void updateElement(int position, String firstName, String lastName, Integer identifyingNumber, Double income) {
     	

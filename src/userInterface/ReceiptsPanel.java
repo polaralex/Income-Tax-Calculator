@@ -18,7 +18,7 @@ public class ReceiptsPanel extends JPanel implements ActionListener {
 	ReceiptsPanel(ArrayList<Receipt> receiptsList) {
 		
 		this.receiptsList = receiptsList;
-		
+				
 		list = new JList<String>();
 		model = new ReceiptListModel(receiptsList);
 		list.setModel(model);

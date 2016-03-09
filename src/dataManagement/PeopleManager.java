@@ -89,7 +89,6 @@ public class PeopleManager {
 	public Person createNewPerson (int category) {
 		
 		if (category == Person.MARRIED_FILING_JOINTLY) {
-			System.out.println("Did this");
 			return(new MarriedFilingJointly());
 		} else if (category == Person.MARRIED_FILING_SEPERATELY) {
 			return(new MarriedFilingSeperately());

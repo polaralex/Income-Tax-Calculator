@@ -30,13 +30,16 @@ public class MainScreen extends GridBagBasedScreen {
 	private JFrame frame;
 	private JLabel mainLabelText;
 	private JScrollPane scrollPane;
+	private JList list;
 	private PersonListModel model;
 	private JButton buttonImportPerson;
 	private JButton buttonExport;
 	private JButton buttonCreatePerson;
+	private JButton buttonDeletePerson;
 	private JButton buttonClose;
 	private String[] personTypes = { "Married Filing Jointly", "Married Filing Seperately", "Head of Household", "Single" };
-
+	Person selectedObject;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -88,7 +91,7 @@ public class MainScreen extends GridBagBasedScreen {
 		peopleManager.testCreatePersons();
 
 		//List model initialization:
-		JList list = new JList();
+		list = new JList();
 		list.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		model = new PersonListModel();
 		list.setModel(model);
@@ -98,10 +101,11 @@ public class MainScreen extends GridBagBasedScreen {
 		scrollPane.setMinimumSize(new Dimension(400,400));
 		
 		// Main Screen Layout Configuration:
-		addGridItem(panel, mainLabelText, 0, 0, 4, 1, GridBagConstraints.CENTER, GridBagConstraints.CENTER, 0.5f);
-		addGridItem(panel, scrollPane, 0, 1, 4, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 1.0f);
+		addGridItem(panel, mainLabelText, 0, 0, 5, 1, GridBagConstraints.CENTER, GridBagConstraints.CENTER, 0.5f);
+		addGridItem(panel, scrollPane, 0, 1, 5, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 1.0f);
 		
 		buttonCreatePerson = new JButton("New");
+		buttonDeletePerson = new JButton("Delete");
 		buttonImportPerson = new JButton("Import");
 		buttonExport = new JButton("Export");
 		buttonClose = new JButton("Close");
@@ -113,7 +117,6 @@ public class MainScreen extends GridBagBasedScreen {
 				if ( e.getSource() == buttonCreatePerson ) {
 					
 					Object category = (String)JOptionPane.showInputDialog(frame, "Choose the type of Tax-Payer:", "Create a new Person", JOptionPane.PLAIN_MESSAGE, null, personTypes, personTypes[0]);					
-					System.out.println(category);
 					
 					// Finds the index of the selected category:
 					int i=0;
@@ -126,6 +129,12 @@ public class MainScreen extends GridBagBasedScreen {
 					model.addElement(newPerson);
 					createPerson.showCard();
 					
+				} else if ( e.getSource() == buttonDeletePerson ) {
+										
+					if (list.getSelectedIndex() >= 0) {
+						model.removeItem(list.getSelectedIndex());
+					}
+					
 				} else if ( e.getSource() == buttonImportPerson ) {
 					
 				} else if ( e.getSource() == buttonClose ) {
@@ -136,13 +145,15 @@ public class MainScreen extends GridBagBasedScreen {
 		};
 		
 		buttonCreatePerson.addActionListener(buttonListener);
+		buttonDeletePerson.addActionListener(buttonListener);
 		buttonImportPerson.addActionListener(buttonListener);
 		buttonClose.addActionListener(buttonListener);
 
 		addGridItem(panel, buttonCreatePerson, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
-		addGridItem(panel, buttonImportPerson, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
-		addGridItem(panel, buttonExport, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
-		addGridItem(panel, buttonClose, 3, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
+		addGridItem(panel, buttonDeletePerson, 1, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
+		addGridItem(panel, buttonImportPerson, 2, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
+		addGridItem(panel, buttonExport, 3, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
+		addGridItem(panel, buttonClose, 4, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
 
 		MouseListener mouseListener = new MouseAdapter() {
 			public void mouseClicked(MouseEvent mouseEvent) {
@@ -150,10 +161,13 @@ public class MainScreen extends GridBagBasedScreen {
 		        if (mouseEvent.getClickCount() == 2) {
 		          int index = theList.locationToIndex(mouseEvent.getPoint());
 		          if (index >= 0 && index < theList.getModel().getSize()) {
-		            Person selectedObject = ((PersonListModel) theList.getModel()).getPersonAt(index);
+		            selectedObject = ((PersonListModel) theList.getModel()).getPersonAt(index);
 		            if (selectedObject != null) {
-		            	PersonCard personCard = new PersonCard(selectedObject);
-		            	personCard.showCard();
+		            	EventQueue.invokeLater(new Runnable(){
+		            		public void run(){
+		            		new PersonCard(selectedObject).setVisible(true);
+		            		}
+		            	});
 		            }
 		          }
 		        }
