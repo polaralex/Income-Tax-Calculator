@@ -1,8 +1,12 @@
 package dataManagement;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.dom4j.DocumentException;
+
+import dataInput.XmlParser;
 import dataManagement.Person;
 import dataManagement.Single;
 
@@ -33,6 +37,7 @@ public class PeopleManager {
 		personList.get(1).addReceipt(new Receipt(9, date, "Health", 100d, companyCreator("Shell","Ioannina")));
 		personList.get(2).addReceipt(new Receipt(3, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
 		personList.get(3).addReceipt(new Receipt(4, date, "Other", 55d, companyCreator("Basilopoulos","Ioannina")));
+		
 	}
 	
 	public ArrayList<Person> getPersonList () {
@@ -57,18 +62,17 @@ public class PeopleManager {
 	
 	public Person createNewPerson (String category, String firstName, String lastName, Integer identifyingNumber, Double income){
 		
-		if (category == "Married Filing Jointly") {
-			 return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
-		} else if (category == "Married Filing Seperately") {
+		if (category.equals("Married Filing Jointly")) {
+			return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
+		} else if (category.equals("Married Filing Seperately")) {
 			return(new MarriedFilingSeperately(firstName, lastName, identifyingNumber, income));
-		} else if (category == "Head of Household") {
+		} else if (category.equals("Head of Household")) {
 			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income));
-		} else if (category == "Single") {
+		} else if (category.equals("Single")) {
 			return(new Single(firstName, lastName, identifyingNumber, income));
 		}
-		
+				
 		return null;
-		
 	}
 	
 	public Company companyCreator(String name, String address) {
@@ -99,5 +103,26 @@ public class PeopleManager {
 		}
 		
 		return null;
+	}
+	
+	public Person importPersonFromXml (String filepath) {
+		
+		XmlParser parser = new XmlParser();
+		parser.readXML(filepath);
+		
+		String category = parser.getStatus();
+		String[] splitNameAndLastname = parser.getName().split("\\s+");
+		String firstname = splitNameAndLastname[1];
+		String lastname = splitNameAndLastname[2];
+		Integer id = Integer.valueOf(parser.getAfm());
+		Double income = Double.valueOf(parser.getIncome());
+		
+		Person newPerson = createNewPerson(category, firstname, lastname, id, income);
+		
+		if (newPerson != null) {
+			return newPerson;
+		} else {
+			return createNewPerson(Person.SINGLE);
+		}
 	}
 }

@@ -3,6 +3,7 @@ package userInterface;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import dataManagement.Person;
 import dataManagement.Receipt;
@@ -50,8 +52,19 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	private ReceiptsPanel receiptsPanel;
 	
 	public PersonCard(Person person) {
+		
 		this.person = person;
-		showCard();
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					showCard();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
 	}
 	
 	public void showCard() {
@@ -89,21 +102,21 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		
 		// Buttons Initialization:
 		buttonSaveChanges = new JButton("Save");
-		buttonSaveChanges.addActionListener(this);
 		buttonClose = new JButton("Close");
-		buttonClose.addActionListener(this);
 		buttonAddReceipt = new JButton("Add");
-		buttonAddReceipt.addActionListener(this);
 		buttonDeleteReceipt = new JButton("Delete");
+		
+		buttonSaveChanges.addActionListener(this);
+		buttonClose.addActionListener(this);
+		buttonAddReceipt.addActionListener(this);
 		buttonDeleteReceipt.addActionListener(this);
-
+		
 		// Person placeholder image initialization:
 		BufferedImage myPicture = null;
 		
 		try {
 			myPicture = ImageIO.read(getClass().getResourceAsStream("/res/icon-user-small.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -152,7 +165,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		
 		addGridItem(panel, buttonSaveChanges, 0, 4, 1, 1, GridBagConstraints.CENTER);
 		addGridItem(panel, buttonClose, 1, 4, 1, 2, GridBagConstraints.CENTER);
-		
+				
 		this.add(panel);
 		this.pack();
 		this.setVisible(true);
@@ -165,20 +178,24 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		
-		if ( e.getSource() == buttonSaveChanges ) {
+		if ( e.getSource().equals(buttonSaveChanges) ) {
 			
-			updatePersonData();
+			if ( isNumeric(textIncome.getText()) && isNumeric(textId.getText()) ) {
+				updatePersonData();
+				this.dispose();
+			} else {
+				JOptionPane.showMessageDialog(this, "Error: Tax-Payer Id and Income should be number values.");
+			}
+			
+		} else if ( e.getSource().equals(buttonClose) ) {
+			
 			this.dispose();
 			
-		} else if ( e.getSource() == buttonClose ) {
-			
-			this.dispose();
-			
-		} else if ( e.getSource() == buttonAddReceipt ) {
+		} else if ( e.getSource().equals(buttonAddReceipt) ) {
 			
 			AddReceiptScreen addReceiptScreen = new AddReceiptScreen(receiptsPanel.getModel());
 			
-		} else if ( e.getSource() == buttonDeleteReceipt ) {
+		} else if ( e.getSource().equals(buttonDeleteReceipt) ) {
 			
 			if ( receiptsPanel.isAnyListCellSelected() == true ){
 				receiptsPanel.deleteSelectedCell();

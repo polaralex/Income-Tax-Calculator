@@ -119,15 +119,14 @@ public class MainScreen extends GridBagBasedScreen {
 					Object category = (String)JOptionPane.showInputDialog(frame, "Choose the type of Tax-Payer:", "Create a new Person", JOptionPane.PLAIN_MESSAGE, null, personTypes, personTypes[0]);					
 					
 					// Finds the index of the selected category:
-					int i=0;
-					while (personTypes[i] != category.toString() && i < personTypes.length){
-						i++;
+					int categoryInteger=0;
+					while (personTypes[categoryInteger] != category.toString() && categoryInteger < personTypes.length){
+						categoryInteger++;
 					}
 
-					Person newPerson = peopleManager.createNewPerson(i+1);
+					Person newPerson = peopleManager.createNewPerson(categoryInteger+1);
 					PersonCard createPerson = new PersonCard(newPerson);
 					model.addElement(newPerson);
-					createPerson.showCard();
 					
 				} else if ( e.getSource() == buttonDeletePerson ) {
 										
@@ -136,6 +135,8 @@ public class MainScreen extends GridBagBasedScreen {
 					}
 					
 				} else if ( e.getSource() == buttonImportPerson ) {
+					
+					model.addElement(peopleManager.importPersonFromXml("src/testInputs/apostolos_zarras.xml"));
 					
 				} else if ( e.getSource() == buttonClose ) {
 					frame.dispose();

@@ -44,4 +44,17 @@ public abstract class GridBagBasedScreen extends JFrame {
 	    
 	    panel.add(comp, gcon);
 	}
+	
+	public static boolean isNumeric(String str)  
+	{  
+	  try  
+	  {  
+	    double d = Double.parseDouble(str);  
+	  }  
+	  catch(NumberFormatException nfe)  
+	  {  
+	    return false;  
+	  }  
+	  return true;  
+	}
 }

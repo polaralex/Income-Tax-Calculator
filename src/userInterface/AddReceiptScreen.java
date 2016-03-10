@@ -11,8 +11,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import dataManagement.Company;
 import dataManagement.Receipt;
@@ -80,6 +82,8 @@ public class AddReceiptScreen extends GridBagBasedScreen implements ActionListen
 		addGridItem(panel, okButton, 0, 6, 1, 1, GridBagConstraints.CENTER);
 		addGridItem(panel, cancelButton, 1, 6, 1, 1, GridBagConstraints.CENTER);
 		
+		SwingUtilities.getRootPane(okButton).setDefaultButton(okButton);
+		
 		this.pack();
 		this.setVisible(true);
 	}
@@ -90,11 +94,15 @@ public class AddReceiptScreen extends GridBagBasedScreen implements ActionListen
 		
 		if ( e.getSource() == okButton ){
 			
-			Date date = new Date();
-			// To-do: Company as an Object:
-			Company company = new Company(companyInput.getText(), "no address");
-			receiptsListModel.addElement(new Receipt(Integer.valueOf(idInput.getText()), date, (String)categoryInput.getSelectedItem(), Double.valueOf(amountInput.getText()), company));
-			this.dispose();
+			if ( isNumeric(idInput.getText()) && isNumeric(amountInput.getText()) ) {
+				Date date = new Date();
+				// To-do: Company as an Object:
+				Company company = new Company(companyInput.getText(), "no address");
+				receiptsListModel.addElement(new Receipt(Integer.valueOf(idInput.getText()), date, (String)categoryInput.getSelectedItem(), Double.valueOf(amountInput.getText()), company));
+				this.dispose();
+			} else {
+				JOptionPane.showMessageDialog(this, "Error: Id and Amount should be number values.");
+			}
 			
 		} else if ( e.getSource() == cancelButton ) {
 			

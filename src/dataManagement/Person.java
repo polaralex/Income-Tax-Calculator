@@ -29,9 +29,10 @@ public abstract class Person {
 	}
 	
 	public Person () {
-		this.firstName = "";
-		this.lastName = "";
-		this.identifyingNumber = (int)(Math.random() * ( 10000 - 0 ));
+		this.firstName = " ";
+		this.lastName = " ";
+		Double idNumberDouble = (Math.random() * ( 999999999 - 100000000 ));
+		this.identifyingNumber = idNumberDouble.intValue();
 		this.income = 0d;
 	}
 	
