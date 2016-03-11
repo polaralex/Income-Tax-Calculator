@@ -59,6 +59,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 			public void run() {
 				try {
 					showCard();
+					SwingUtilities.getRootPane(buttonSaveChanges).setDefaultButton(buttonSaveChanges);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

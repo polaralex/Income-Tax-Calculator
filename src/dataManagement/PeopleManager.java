@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.dom4j.DocumentException;
 
+import dataInput.ScannerXmlParser;
 import dataInput.XmlParser;
 import dataManagement.Person;
 import dataManagement.Single;
@@ -107,22 +108,27 @@ public class PeopleManager {
 	
 	public Person importPersonFromXml (String filepath) {
 		
-		XmlParser parser = new XmlParser();
-		parser.readXML(filepath);
+		//Test:
+		ScannerXmlParser xmlParser = new ScannerXmlParser(new File(filepath));
 		
-		String category = parser.getStatus();
-		String[] splitNameAndLastname = parser.getName().split("\\s+");
-		String firstname = splitNameAndLastname[1];
-		String lastname = splitNameAndLastname[2];
-		Integer id = Integer.valueOf(parser.getAfm());
-		Double income = Double.valueOf(parser.getIncome());
-		
-		Person newPerson = createNewPerson(category, firstname, lastname, id, income);
-		
-		if (newPerson != null) {
-			return newPerson;
-		} else {
-			return createNewPerson(Person.SINGLE);
-		}
+//		XmlParser parser = new XmlParser();
+//		parser.readXML(filepath);
+//		
+//		String category = parser.getStatus();
+//		String[] splitNameAndLastname = parser.getName().split("\\s+");
+//		String firstname = splitNameAndLastname[1];
+//		String lastname = splitNameAndLastname[2];
+//		Integer id = Integer.valueOf(parser.getAfm());
+//		Double income = Double.valueOf(parser.getIncome());
+//		
+//		Person newPerson = createNewPerson(category, firstname, lastname, id, income);
+//		
+//		if (newPerson != null) {
+//			return newPerson;
+//		} else {
+//			return createNewPerson(Person.SINGLE);
+//		}	
+		return createNewPerson(Person.SINGLE);
+
 	}
 }

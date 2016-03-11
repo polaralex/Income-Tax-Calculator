@@ -1,0 +1,19 @@
+<Person>
+	
+<Name> Apostolos Zarras </Name>
+<AFM> 130456093 </AFM>
+<Status> Married Filing Jointly </Status>
+<Income> 22570 </Income>
+sss
+<Receipts>
+<ReceiptID> 1 </ReceiptID>
+<Date> 25/2/2014 </Date>
+<Kind> Basic </Kind>
+<Amount> 2000 </Amount>
+<Company> Hand Made Clothes </Company>
+<Country> Greece </Country>
+<City> Ioannina </City>
+<Street> Kaloudi </Street>
+<Number> 10 </Number> 
+
+</Person>

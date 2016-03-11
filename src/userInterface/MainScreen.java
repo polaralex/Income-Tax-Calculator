@@ -23,7 +23,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 public class MainScreen extends GridBagBasedScreen {
 
@@ -136,7 +138,16 @@ public class MainScreen extends GridBagBasedScreen {
 					
 				} else if ( e.getSource() == buttonImportPerson ) {
 					
-					model.addElement(peopleManager.importPersonFromXml("src/testInputs/apostolos_zarras.xml"));
+					String filename = "";
+					JFileChooser fileChooser = new JFileChooser();
+					FileNameExtensionFilter filter = new FileNameExtensionFilter("XML and TXT files", "xml", "txt");
+					fileChooser.setFileFilter(filter);
+					int returnVal = fileChooser.showOpenDialog(frame);
+					
+					if(returnVal == JFileChooser.APPROVE_OPTION) {
+						filename = fileChooser.getSelectedFile().getAbsolutePath();
+						model.addElement(peopleManager.importPersonFromXml(filename));
+					}
 					
 				} else if ( e.getSource() == buttonClose ) {
 					frame.dispose();
