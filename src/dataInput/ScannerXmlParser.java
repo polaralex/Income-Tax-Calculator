@@ -2,16 +2,18 @@ package dataInput;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.w3c.dom.*;
+import dataManagement.Company;
+import dataManagement.Receipt;
 
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Locale;
 
 public class ScannerXmlParser {
 	
@@ -22,11 +24,16 @@ public class ScannerXmlParser {
 	
 	private ArrayList<String> parsedWords = new ArrayList<String>();
 	private Integer parsedWordsIterator = 0;
-	
 	private String word;
-	private String peekWord;
 	private String readWords;
-	
+
+	//Data to Export:
+	private String firstname;
+	private String lastname;
+	private Integer afmFinal;
+	private Double incomeFinal;
+	private ArrayList<Receipt> receiptsList = new ArrayList<Receipt>();
+		
 	public ScannerXmlParser(File xmlFile) {
 		
 		BufferedReader in = null;
@@ -55,6 +62,11 @@ public class ScannerXmlParser {
 		        }
 		    }
 		    
+		    // For Debugging:
+		    for (int i=0; i<parsedWords.size(); i++){
+		    	System.out.println(i+": "+parsedWords.get(i));
+		    }
+		   		    
 		    // Then, do the parsing on the cleaned up data:
 		    parsePersonData();
 		    parseReceiptData();
@@ -71,27 +83,58 @@ public class ScannerXmlParser {
 	}
 	
 	private void parsePersonData() {
-		
+			
 		// Consume the <Person> opening tag:
-		getNextWord();
-		
+		consumePerson();
 		name = checkInsideTag("Name");
 		afm = checkInsideTag("AFM");
 		status = checkInsideTag("Status");
 		income = checkInsideTag("Income");
+
+		//String[] splittedName = name.split("\\s+");
+		
+		// Encoded to Person Object compatible types:
+		firstname = name;
+		lastname = " ";
+		afmFinal = Integer.getInteger(afm);
+		incomeFinal = Double.parseDouble(income);
 		
 		// Consume the <Person> closing tag:
 		getNextWord();
+
+	}
+	
+	private String checkInsideTag(String tagElement) {
 		
-		printCurrentData();
+		getNextWord();
+		System.out.println("Element: "+ tagElement+ ", Word: "+ word +", Iterator: "+parsedWordsIterator);
+		String currentWord = "";
+		
+		if(word.equals("<"+tagElement+">")){
+			
+			System.out.println("The word is a starting tag.");
+			getNextWord();
+			
+			while( !(word.equalsIgnoreCase("</"+tagElement+">")) ){
+				currentWord = currentWord + " " + word;
+				getNextWord();
+			}
+			
+			System.out.println("The word is a closing tag.");		
+			
+			return currentWord;
+			
+		} else {
+			System.out.println("Problem in XML Parsing of tag: "+tagElement);
+			return null;
+		}
 	}
 	
 	private void parseReceiptData() {
 		
-		// Consume the <Receipts> opening tag (and go to the next one):
-		getNextWord();
+		consumeReceipt();
 		
-		while (peekWord != "</Receipts>" || word != "</Receipts>") {
+		while ( isNextWordReceiptId() ) {
 						
 			String receiptId = checkInsideTag("ReceiptID");
 			String date = checkInsideTag("Date");
@@ -101,69 +144,92 @@ public class ScannerXmlParser {
 			String country = checkInsideTag("Country");
 			String city = checkInsideTag("City");
 			String street = checkInsideTag("Street");
-			String number = checkInsideTag("Number");
+			String addressNumber = checkInsideTag("Number");
 			
-			System.out.println(receiptId+" "+date+" "+kind+" "+amount+" "+company+" "+country+" "+city+" "+street+" "+number);
-		}
-	}
-	
-	private void getNextWord() {
-		if (parsedWordsIterator < parsedWords.size()-2) {
-			parsedWordsIterator = parsedWordsIterator + 1;
-			word = parsedWords.get(parsedWordsIterator);
-			peekWord = parsedWords.get(parsedWordsIterator+1);
-			System.out.println("Get Next Word: " + word);
-		} else if (parsedWordsIterator == parsedWords.size()-1) {
-			word = parsedWords.get(parsedWordsIterator);
-			peekWord = null;
-			parsedWordsIterator++;
-		} else {
-			word = null;
-			peekWord = null;
-			parsedWordsIterator++;
-		}
-	}
-	
-	private String checkInsideTag(String tagElement) {
-		
-		System.out.println("Element: "+ tagElement+ ", Word: "+ word);
-		String currentWord = "";
-		
-		if(word.equals("<"+tagElement+">")){
-						
-			getNextWord();
-			
-			while( !(word.equalsIgnoreCase("</"+tagElement+">")) ){
-				currentWord = currentWord + " " + word;
-				getNextWord();
+			// Encode to types compatible with the Receipt Object:
+			Integer receiptIdFinal = Integer.getInteger(receiptId);
+			Date dateFinal = new Date();
+			DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+			try {
+				dateFinal = format.parse(date);
+			} catch (ParseException e) {
+				e.printStackTrace();
 			}
+			String categoryFinal = kind;
+			Double amountFinal = Double.valueOf(amount);
+			Company companyFinal = new Company(company, street + " " + addressNumber + ", " + city + ", " + country);
 			
-			getNextWord();			
-			return currentWord;
+			receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
 			
-		} else {
-			System.out.println("Problem in XML Parsing of tag: "+tagElement);
-			return null;
+			// Debugging:
+			System.out.println(receiptId+" "+date+" "+kind+" "+amount+" "+company+" "+country+" "+city+" "+street+" "+addressNumber);
+			System.out.println("Receipts List Size: "+receiptsList.size());
 		}
+	}
+
+	private void getNextWord() {
+		if (parsedWordsIterator < parsedWords.size()) {
+			parsedWordsIterator++;
+			word = parsedWords.get(parsedWordsIterator);
+			System.out.println("Got Next Word: "+word);
+		} else {
+			word = "\0";
+		}
+	}
+	
+	private Boolean isNextWordReceiptId() {
+		getNextWord();
+		if (word.equals("<ReceiptID>")){
+			parsedWordsIterator = parsedWordsIterator - 2;
+			getNextWord();
+			return (true);
+		} else {
+			return (false);
+		}
+	}
+	
+	private void consumePerson(){
+		word = parsedWords.get(0);
+
+		if( word.equals("<Person>")){
+			System.out.println("Person correctly consumed");
+		}
+	}
+	
+	private void consumeReceipt(){
+
+		getNextWord();
+		
+		if( word.equals("<Receipt>")){
+			System.out.println("Receipt correctly consumed");
+		}
+	}
+	
+	public ArrayList<Receipt> getReceiptsList() {
+		return receiptsList;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public Integer getAfm() {
+		return afmFinal;
+	}
+
+	public Double getIncome() {
+		return incomeFinal;
 	}
 	
 	public String getName() {
 		return name;
 	}
 
-	public String getAfm() {
-		return afm;
-	}
-
-	public String getStatus() {
+	public String getCategory() {
 		return status;
-	}
-
-	public String getIncome() {
-		return income;
-	}
-	
-	private void printCurrentData() {
-		System.out.println("Imported Person Data: "+name+" "+afm+" "+status+" "+income);
 	}
 }

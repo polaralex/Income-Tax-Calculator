@@ -102,4 +102,8 @@ public abstract class Person {
 	public ArrayList<Receipt> getReceiptsList () {
 		return receipts;
 	}	
+	
+	public void addReceiptsList (ArrayList<Receipt> importedReceiptsList) {
+		receipts.addAll(importedReceiptsList);
+	}	
 }

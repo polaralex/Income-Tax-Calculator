@@ -13,6 +13,8 @@ import dataManagement.Single;
 
 public class PeopleManager {
 
+	ScannerXmlParser xmlParser;
+	
 	//Create basic Objects for Testing:
 	ArrayList<Person> personList = new ArrayList<Person>();
 	
@@ -58,7 +60,6 @@ public class PeopleManager {
 		}
 		
 		return null;
-		
 	}
 	
 	public Person createNewPerson (String category, String firstName, String lastName, Integer identifyingNumber, Double income){
@@ -71,6 +72,21 @@ public class PeopleManager {
 			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income));
 		} else if (category.equals("Single")) {
 			return(new Single(firstName, lastName, identifyingNumber, income));
+		}
+				
+		return null;
+	}
+	
+public Person createNewPerson (String category, String firstName, String lastName, Integer identifyingNumber, Double income, ArrayList<Receipt> receiptList){
+		
+		if (category.equals("Married Filing Jointly")) {
+			return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income, receiptList));
+		} else if (category.equals("Married Filing Seperately")) {
+			return(new MarriedFilingSeperately(firstName, lastName, identifyingNumber, income, receiptList));
+		} else if (category.equals("Head of Household")) {
+			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income, receiptList));
+		} else if (category.equals("Single")) {
+			return(new Single(firstName, lastName, identifyingNumber, income, receiptList));
 		}
 				
 		return null;
@@ -108,27 +124,14 @@ public class PeopleManager {
 	
 	public Person importPersonFromXml (String filepath) {
 		
-		//Test:
-		ScannerXmlParser xmlParser = new ScannerXmlParser(new File(filepath));
-		
-//		XmlParser parser = new XmlParser();
-//		parser.readXML(filepath);
-//		
-//		String category = parser.getStatus();
-//		String[] splitNameAndLastname = parser.getName().split("\\s+");
-//		String firstname = splitNameAndLastname[1];
-//		String lastname = splitNameAndLastname[2];
-//		Integer id = Integer.valueOf(parser.getAfm());
-//		Double income = Double.valueOf(parser.getIncome());
-//		
-//		Person newPerson = createNewPerson(category, firstname, lastname, id, income);
-//		
-//		if (newPerson != null) {
-//			return newPerson;
-//		} else {
-//			return createNewPerson(Person.SINGLE);
-//		}	
-		return createNewPerson(Person.SINGLE);
+		xmlParser = new ScannerXmlParser(new File(filepath));
+		Person importedPerson = createNewPerson(xmlParser.getCategory(), xmlParser.getFirstname(), xmlParser.getLastname(), xmlParser.getAfm(), xmlParser.getIncome(), xmlParser.getReceiptsList());
 
+//		System.out.println("First name: "+xmlParser.getFirstname());
+//		System.out.println("Income name: "+xmlParser.getIncome().toString());
+//		System.out.println("Receipt ID1: "+xmlParser.getReceiptsList().get(1).getReceiptId().toString());
+//		System.out.println("Receipt Amount1: "+xmlParser.getReceiptsList().get(1).getAmount().toString());
+
+		return importedPerson;
 	}
 }
