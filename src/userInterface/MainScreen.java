@@ -28,7 +28,8 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import dataInput.ScannerXmlParser;
+import dataInput.XmlEncoder;
+import dataInput.XmlParser;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -47,7 +48,7 @@ public class MainScreen extends GridBagBasedScreen {
 	private JButton buttonDeletePerson;
 	private JButton buttonClose;
 	private String[] personTypes = { "Married Filing Jointly", "Married Filing Seperately", "Head of Household", "Single" };
-	ScannerXmlParser xmlParser;
+	XmlParser xmlParser;
 	String filename = "";
 	JFileChooser fileChooser;
 	Person selectedObject;
@@ -156,7 +157,7 @@ public class MainScreen extends GridBagBasedScreen {
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
 						
 						filename = fileChooser.getSelectedFile().getAbsolutePath();
-						xmlParser = new ScannerXmlParser(new File(filename));
+						xmlParser = new XmlParser(new File(filename));
 						
 						String firstname = xmlParser.getFirstname();
 						String lastname = xmlParser.getLastname();
@@ -174,6 +175,22 @@ public class MainScreen extends GridBagBasedScreen {
 						model.addElement(newPerson);
 												
 					}
+				} else if ( e.getSource() == buttonExport ) {
+					
+					if (list.getSelectedIndex() > 0) {
+						
+						Person personObject = model.getPersonAt(list.getSelectedIndex());
+						String personAfm = personObject.getIdentifyingNumber().toString();
+						fileChooser = new JFileChooser();
+						fileChooser.setSelectedFile(new File(personAfm+"_INFO.txt"));
+						int returnVal = fileChooser.showSaveDialog(frame);
+						
+						if(returnVal == JFileChooser.APPROVE_OPTION) {
+							filename = fileChooser.getSelectedFile().getAbsolutePath();
+							XmlEncoder xmlEncoder = new XmlEncoder(filename, personObject);
+						}
+					}
+					
 				} else if ( e.getSource() == buttonClose ) {
 					frame.dispose();
 					System.exit(0);
@@ -184,6 +201,7 @@ public class MainScreen extends GridBagBasedScreen {
 		buttonCreatePerson.addActionListener(buttonListener);
 		buttonDeletePerson.addActionListener(buttonListener);
 		buttonImportPerson.addActionListener(buttonListener);
+		buttonExport.addActionListener(buttonListener);
 		buttonClose.addActionListener(buttonListener);
 
 		addGridItem(panel, buttonCreatePerson, 0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0f);
