@@ -21,14 +21,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.File;
 
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import dataInput.ScannerXmlParser;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 public class MainScreen extends GridBagBasedScreen {
 
+	PeopleManager peopleManager;
 	private JFrame frame;
 	private JLabel mainLabelText;
 	private JScrollPane scrollPane;
@@ -40,6 +45,9 @@ public class MainScreen extends GridBagBasedScreen {
 	private JButton buttonDeletePerson;
 	private JButton buttonClose;
 	private String[] personTypes = { "Married Filing Jointly", "Married Filing Seperately", "Head of Household", "Single" };
+	ScannerXmlParser xmlParser;
+	String filename = "";
+	JFileChooser fileChooser;
 	Person selectedObject;
 	
 	public static void main(String[] args) {
@@ -89,7 +97,7 @@ public class MainScreen extends GridBagBasedScreen {
 		mainLabelText.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		
 		// People Manager Initialization:
-		final PeopleManager peopleManager = new PeopleManager();
+		peopleManager = new PeopleManager();
 		peopleManager.testCreatePersons();
 
 		//List model initialization:
@@ -138,17 +146,30 @@ public class MainScreen extends GridBagBasedScreen {
 					
 				} else if ( e.getSource() == buttonImportPerson ) {
 					
-					String filename = "";
-					JFileChooser fileChooser = new JFileChooser();
+					fileChooser = new JFileChooser();
 					FileNameExtensionFilter filter = new FileNameExtensionFilter("XML and TXT files", "xml", "txt");
 					fileChooser.setFileFilter(filter);
 					int returnVal = fileChooser.showOpenDialog(frame);
 					
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
+						
 						filename = fileChooser.getSelectedFile().getAbsolutePath();
-						model.addElement(peopleManager.importPersonFromXml(filename));
+						xmlParser = new ScannerXmlParser(new File(filename));
+						
+						String firstname = xmlParser.getFirstname();
+						String lastname = xmlParser.getLastname();
+						String category = xmlParser.getCategory();
+						Integer afm = xmlParser.getAfm();
+						Double income = xmlParser.getIncome();
+						
+						//System.out.println("FINAL DATA: ["+firstname+" "+lastname+" "+afm.toString()+"]");
+						
+						Person newPerson = peopleManager.createNewPerson(category, firstname, lastname, afm, income);
+						// ΩΣ ΕΔΩ ΕΙΝΑΙ ΚΑΛΑ!
+						
+						model.addElement(newPerson);
+												
 					}
-					
 				} else if ( e.getSource() == buttonClose ) {
 					frame.dispose();
 					System.exit(0);

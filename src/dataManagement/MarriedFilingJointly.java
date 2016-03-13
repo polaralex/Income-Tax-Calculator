@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MarriedFilingJointly extends Person {
 
-	MarriedFilingJointly(String firstName, String lastName, Integer identifyingNumber, Object income) {
+	public MarriedFilingJointly(String firstName, String lastName, Integer identifyingNumber, Object income) {
 		super(firstName, lastName, identifyingNumber, income);
 	}
 	

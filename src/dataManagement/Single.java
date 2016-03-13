@@ -1,7 +1,5 @@
 package dataManagement;
 
-import java.util.ArrayList;
-
 public class Single extends Person {
 
 	public Single(String firstName, String lastName, Integer identifyingNumber, Object income) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class HeadOfHousehold extends Person {
 
-	HeadOfHousehold(String firstName, String lastName, Integer identifyingNumber, Object income) {
+	public HeadOfHousehold(String firstName, String lastName, Integer identifyingNumber, Object income) {
 		super(firstName, lastName, identifyingNumber, income);
 	}
 

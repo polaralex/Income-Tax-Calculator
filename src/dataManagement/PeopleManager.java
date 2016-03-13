@@ -1,19 +1,14 @@
 package dataManagement;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.dom4j.DocumentException;
+import javax.swing.JOptionPane;
 
-import dataInput.ScannerXmlParser;
-import dataInput.XmlParser;
 import dataManagement.Person;
 import dataManagement.Single;
 
 public class PeopleManager {
-
-	ScannerXmlParser xmlParser;
 	
 	//Create basic Objects for Testing:
 	ArrayList<Person> personList = new ArrayList<Person>();
@@ -59,10 +54,13 @@ public class PeopleManager {
 			return(new Single(firstName, lastName, identifyingNumber, income));
 		}
 		
-		return null;
+		System.out.println("Error: Problem with the Identification of Tax-Payer Category.");
+		return(new Single(" ", " ", 0, 0));
 	}
 	
-	public Person createNewPerson (String category, String firstName, String lastName, Integer identifyingNumber, Double income){
+	public Person createNewPerson (String categoryBeforeTrim, String firstName, String lastName, Integer identifyingNumber, Double income){
+		
+		String category = categoryBeforeTrim.trim();
 		
 		if (category.equals("Married Filing Jointly")) {
 			return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
@@ -74,22 +72,8 @@ public class PeopleManager {
 			return(new Single(firstName, lastName, identifyingNumber, income));
 		}
 				
-		return null;
-	}
-	
-public Person createNewPerson (String category, String firstName, String lastName, Integer identifyingNumber, Double income, ArrayList<Receipt> receiptList){
-		
-		if (category.equals("Married Filing Jointly")) {
-			return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income, receiptList));
-		} else if (category.equals("Married Filing Seperately")) {
-			return(new MarriedFilingSeperately(firstName, lastName, identifyingNumber, income, receiptList));
-		} else if (category.equals("Head of Household")) {
-			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income, receiptList));
-		} else if (category.equals("Single")) {
-			return(new Single(firstName, lastName, identifyingNumber, income, receiptList));
-		}
-				
-		return null;
+		System.out.println("Error: Problem with the Identification of Tax-Payer Category.");
+		return(new Single(" ", " ", 0, 0));
 	}
 	
 	public Company companyCreator(String name, String address) {
@@ -122,16 +106,4 @@ public Person createNewPerson (String category, String firstName, String lastNam
 		return null;
 	}
 	
-	public Person importPersonFromXml (String filepath) {
-		
-		xmlParser = new ScannerXmlParser(new File(filepath));
-		Person importedPerson = createNewPerson(xmlParser.getCategory(), xmlParser.getFirstname(), xmlParser.getLastname(), xmlParser.getAfm(), xmlParser.getIncome(), xmlParser.getReceiptsList());
-
-//		System.out.println("First name: "+xmlParser.getFirstname());
-//		System.out.println("Income name: "+xmlParser.getIncome().toString());
-//		System.out.println("Receipt ID1: "+xmlParser.getReceiptsList().get(1).getReceiptId().toString());
-//		System.out.println("Receipt Amount1: "+xmlParser.getReceiptsList().get(1).getAmount().toString());
-
-		return importedPerson;
-	}
 }
