@@ -47,6 +47,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	private JTextArea textAreaName;
 	private JTextArea textAreaSurname;
 	private JTextArea textIncome;
+	private JTextArea textTaxAfterReceipts;
 	private JLabel personTypeLabel;
 	
 	private ReceiptsPanel receiptsPanel;
@@ -98,6 +99,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		textAreaName = new JTextArea(person.getFirstName());
 		textAreaSurname = new JTextArea(person.getLastName());
 		textIncome = new JTextArea(person.getIncome().toString());
+		textTaxAfterReceipts = new JTextArea(person.calculateTax().toString());
 		personTypeLabel = new JLabel("Category: "+ person.getPersonType());
 		personTypeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		
@@ -144,6 +146,10 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		wrapperId.setBorder(new TitledBorder("Id:"));
 		wrapperId.add(textId);
 		
+		JPanel wrapperTax = new JPanel(new BorderLayout());
+		wrapperTax.setBorder(new TitledBorder("Calculated Tax:"));
+		wrapperTax.add(textTaxAfterReceipts);
+		
 		// Receipts Panel initialization:
 		receiptsPanel = new ReceiptsPanel(person.getReceiptsList());
 		
@@ -155,14 +161,15 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		
 		addGridItem(panel, personTypeLabel, 0, 0, 2, 1, GridBagConstraints.CENTER);
 		addGridItem(panel, picLabel, 0, 1, 2, 2, GridBagConstraints.CENTER);
-		addGridItem(panel, wrapperName, 2, 0, 2, 1, GridBagConstraints.EAST);
-		addGridItem(panel, wrapperSurname, 2, 1, 2, 1, GridBagConstraints.EAST);
-		addGridItem(panel, wrapperIncome, 2, 2, 2, 1, GridBagConstraints.EAST);
-		addGridItem(panel, wrapperId, 2, 3, 2, 1, GridBagConstraints.EAST);
+		addGridItem(panel, wrapperName, 2, 0, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, wrapperSurname, 2, 1, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, wrapperIncome, 2, 2, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, wrapperId, 2, 3, 2, 1, GridBagConstraints.CENTER);
 		
-		addGridItem(panel, scrollReceiptsPanel, 4, 0, 2, 3, GridBagConstraints.SOUTH);
-		addGridItem(panel, buttonAddReceipt, 4, 3, 1, 2, GridBagConstraints.NORTHWEST);
-		addGridItem(panel, buttonDeleteReceipt, 5, 3, 1, 2, GridBagConstraints.NORTHEAST);
+		addGridItem(panel, wrapperTax, 4, 0, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, scrollReceiptsPanel, 4, 1, 2, 2, GridBagConstraints.SOUTH);
+		addGridItem(panel, buttonAddReceipt, 4, 3, 1, 1, GridBagConstraints.NORTHWEST);
+		addGridItem(panel, buttonDeleteReceipt, 5, 3, 1, 1, GridBagConstraints.NORTHEAST);
 		
 		addGridItem(panel, buttonSaveChanges, 0, 4, 1, 1, GridBagConstraints.CENTER);
 		addGridItem(panel, buttonClose, 1, 4, 1, 2, GridBagConstraints.CENTER);

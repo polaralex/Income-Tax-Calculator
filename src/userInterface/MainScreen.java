@@ -188,6 +188,7 @@ public class MainScreen extends GridBagBasedScreen {
 						if(returnVal == JFileChooser.APPROVE_OPTION) {
 							filename = fileChooser.getSelectedFile().getAbsolutePath();
 							XmlEncoder xmlEncoder = new XmlEncoder(filename, personObject);
+							JOptionPane.showMessageDialog(frame, "The file "+filename+" was saved to disk.");
 						}
 					}
 					
