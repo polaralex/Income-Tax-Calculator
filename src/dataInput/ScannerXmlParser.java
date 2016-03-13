@@ -124,18 +124,18 @@ public class ScannerXmlParser {
 		
 		while ( isNextWordReceiptId() ) {
 						
-			String receiptId = checkInsideTag("ReceiptID");
-			String date = checkInsideTag("Date");
-			String kind = checkInsideTag("Kind");
-			String amount = checkInsideTag("Amount");
-			String company = checkInsideTag("Company");
-			String country = checkInsideTag("Country");
-			String city = checkInsideTag("City");
-			String street = checkInsideTag("Street");
-			String addressNumber = checkInsideTag("Number");
+			String receiptId = checkInsideTag("ReceiptID").trim();
+			String date = checkInsideTag("Date").trim();
+			String kind = checkInsideTag("Kind").trim();
+			String amount = checkInsideTag("Amount").trim();
+			String company = checkInsideTag("Company").trim();
+			String country = checkInsideTag("Country").trim();
+			String city = checkInsideTag("City").trim();
+			String street = checkInsideTag("Street").trim();
+			String addressNumber = checkInsideTag("Number").trim();
 			
 			// Encode to types compatible with the Receipt Object:
-			Integer receiptIdFinal = Integer.getInteger(receiptId);
+			Integer receiptIdFinal = Integer.parseInt(receiptId);
 			Date dateFinal = new Date();
 			DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
 			try {

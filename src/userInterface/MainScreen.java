@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import dataManagement.PeopleManager;
 import dataManagement.Person;
+import dataManagement.Receipt;
 
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -22,6 +23,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -161,11 +163,13 @@ public class MainScreen extends GridBagBasedScreen {
 						String category = xmlParser.getCategory();
 						Integer afm = xmlParser.getAfm();
 						Double income = xmlParser.getIncome();
-						
-						//System.out.println("FINAL DATA: ["+firstname+" "+lastname+" "+afm.toString()+"]");
+						ArrayList<Receipt> receiptList = xmlParser.getReceiptsList();
 						
 						Person newPerson = peopleManager.createNewPerson(category, firstname, lastname, afm, income);
-						// ΩΣ ΕΔΩ ΕΙΝΑΙ ΚΑΛΑ!
+						
+						if (!receiptList.equals(null)){
+							newPerson.addReceiptsList(receiptList);
+						}
 						
 						model.addElement(newPerson);
 												
