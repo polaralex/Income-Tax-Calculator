@@ -41,6 +41,7 @@ public class TextFileParser extends InputFileParser {
 
 		// Preparing name for processing:
 		String[] splittedName = name.split("\\s+");
+		
 		// Encoding to Person Object compatible types:
 		firstname = splittedName[0];
 		lastname = splittedName[1];
@@ -51,11 +52,10 @@ public class TextFileParser extends InputFileParser {
 	
 	void parseReceiptData() {
 		
-		consumeReceipt();
+		consumeReceipts();
 		
 		while ( isNextWordReceiptId() ) {
 						
-			getNextWord(); // Consume "receipt" - the part of "Receipt ID"
 			String receiptId = checkLabel("ID").trim();
 			String date = checkLabel("Date").trim();
 			String kind = checkLabel("Kind").trim();
@@ -97,7 +97,7 @@ public class TextFileParser extends InputFileParser {
 			
 			getNextWord();
 			
-			while( !(word.matches("\\w+:")) && !(isEndOfParsedWords()) ){
+			while( !(word.matches("\\w+:")) && !(word.equals("Receipt")) && !(isEndOfParsedWords()) ){
 				System.out.println("Current word: "+word);
 				System.out.println("Current word building: "+currentWord);
 
@@ -122,9 +122,8 @@ public class TextFileParser extends InputFileParser {
 			
 			getNextWord();
 			
-			if(word.equals("ID")){
-				
-				getNextWord();
+			if(word.equals("ID:")){
+				goToPreviousWord();
 				return (true);
 			}	
 		} else {
@@ -133,12 +132,12 @@ public class TextFileParser extends InputFileParser {
 		return (false);
 	}
 	
-	private void consumeReceipt(){
+	private void consumeReceipts(){
 
 		getNextWord();
 		
 		if( word.equals("Receipts:")){
-			//System.out.println("Receipt correctly consumed");
+			System.out.println("'Receipts' correctly consumed");
 		}
 	}
 }

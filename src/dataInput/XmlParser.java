@@ -1,24 +1,13 @@
 package dataInput;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import dataManagement.Company;
-import dataManagement.HeadOfHousehold;
-import dataManagement.MarriedFilingJointly;
-import dataManagement.MarriedFilingSeperately;
-import dataManagement.PeopleManager;
-import dataManagement.Person;
 import dataManagement.Receipt;
-import dataManagement.Single;
-
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class XmlParser extends InputFileParser {
