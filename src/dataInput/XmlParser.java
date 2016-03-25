@@ -21,82 +21,17 @@ import dataManagement.Single;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class XmlParser {
-	
-	// Person data in String form:
-	private String name = null;
-	private String afm = null;
-	private String status = null;
-	private String income = null;
-	
-	private ArrayList<String> parsedWords = new ArrayList<String>();
-	private Integer parsedWordsIterator = 0;
-	private String word;
-	private String readWords;
+public class XmlParser extends InputFileParser {
 
-	// Data to Export for Person:
-	private String firstname = "empty";
-	private String lastname = "empty";
-	private Integer afmFinal = 00000;
-	private Double incomeFinal = 00000d;
-	
-	// Data to Export for Receipts:
-	private ArrayList<Receipt> receiptsList = new ArrayList<Receipt>();
-			
-	public XmlParser(File xmlFile) {
+	public XmlParser(File filename) {
 		
-			tokenizeInput(xmlFile);
-		    parsePersonData();
-		    parseReceiptData();
+		tokenizeInput(filename);
+	    parsePersonData();
+	    parseReceiptData();
 	}
-	
-	private void tokenizeInput (File xmlFile) {
-		
-		BufferedReader in = null;
-		
-		try {
-			// First, we open the file and read all the lines of the file:
-		    in = new BufferedReader(new FileReader(xmlFile));
-		    String readLine = "";
-		    while ( (readLine = in.readLine()) != null ) {
-		    	if (readWords == null) {
-		    		readWords = readLine;
-		    	} else {
-		    		readWords = readWords+" "+readLine;
-		    	}
-		    }
-		    
-		    //Debug: System.out.println(readWords);
-		    
-		    // Now we want to split the lines string in words:
-		    if ( readWords != null) {
-		    	String[] splited;
-		        splited = readWords.split("\\s+");
-		        for (String word : splited) {
-		            if (word != null) { 
-		            	parsedWords.add(word);
-		            }
-		        }
-		    }
-		    
-		    // For Debugging:
-		    //for (int i=0; i<parsedWords.size(); i++){
-		    //	System.out.println(i+": "+parsedWords.get(i));
-		    //}
-		    
-		} catch (IOException e) {
-		    System.out.println("There was a problem: " + e);
-		    e.printStackTrace();
-		} finally {
-		    try {
-		        in.close();
-		    } catch (Exception e) {
-		    }
-		}
-	}
-	
-	private void parsePersonData() {
-			
+
+	void parsePersonData() {
+
 		// Consume the <Person> opening tag:
 		consumePerson();
 		name = checkInsideTag("Name").trim();
@@ -106,24 +41,24 @@ public class XmlParser {
 
 		// Preparing name for processing:
 		String[] splittedName = name.split("\\s+");
-		
+
 		// Encoding to Person Object compatible types:
 		firstname = splittedName[0];
 		lastname = splittedName[1];
 		afmFinal = Integer.parseInt(afm);
 		incomeFinal = Double.parseDouble(income);
-				
+
 		// Consume the <Person> closing tag:
 		getNextWord();
 
 	}
-	
-	private void parseReceiptData() {
-		
+
+	void parseReceiptData() {
+
 		consumeReceipt();
-		
-		while ( isNextWordReceiptId() ) {
-						
+
+		while (isNextWordReceiptId()) {
+
 			String receiptId = checkInsideTag("ReceiptID").trim();
 			String date = checkInsideTag("Date").trim();
 			String kind = checkInsideTag("Kind").trim();
@@ -133,7 +68,7 @@ public class XmlParser {
 			String city = checkInsideTag("City").trim();
 			String street = checkInsideTag("Street").trim();
 			String addressNumber = checkInsideTag("Number").trim();
-			
+
 			// Encode to types compatible with the Receipt Object:
 			Integer receiptIdFinal = Integer.parseInt(receiptId);
 			Date dateFinal = new Date();
@@ -146,54 +81,47 @@ public class XmlParser {
 			String categoryFinal = kind;
 			Double amountFinal = Double.valueOf(amount);
 			Company companyFinal = new Company(company, street + " " + addressNumber + ", " + city + ", " + country);
-			
+
 			receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
-			
+
 			// Debugging:
-				//System.out.println(receiptId+" "+date+" "+kind+" "+amount+" "+company+" "+country+" "+city+" "+street+" "+addressNumber);
-				//System.out.println("Receipts List Size: "+receiptsList.size());
+			// System.out.println(receiptId+" "+date+" "+kind+" "+amount+"
+			// "+company+" "+country+" "+city+" "+street+" "+addressNumber);
+			// System.out.println("Receipts List Size: "+receiptsList.size());
 		}
 	}
-	
+
 	private String checkInsideTag(String tagElement) {
-		
+
 		getNextWord();
-		//Debug: System.out.println("Element: "+ tagElement+ ", Word: "+ word +", Iterator: " + parsedWordsIterator);
+		// Debug: System.out.println("Element: "+ tagElement+ ", Word: "+ word
+		// +", Iterator: " + parsedWordsIterator);
 		String currentWord = "";
-		
-		if(word.equals("<"+tagElement+">")){
-			
-			//Debug: System.out.println("The word is a starting tag.");
+
+		if (word.equals("<" + tagElement + ">")) {
+
+			// Debug: System.out.println("The word is a starting tag.");
 			getNextWord();
-			
-			while( !(word.equalsIgnoreCase("</"+tagElement+">")) ){
+
+			while (!(word.equalsIgnoreCase("</" + tagElement + ">"))) {
 				currentWord = currentWord + " " + word;
 				getNextWord();
 			}
-			
-			//Debug: System.out.println("The word is a closing tag.");		
-			
+
+			// Debug: System.out.println("The word is a closing tag.");
+
 			return currentWord;
-			
+
 		} else {
-			//Debug: System.out.println("Problem in XML Parsing of tag: "+tagElement);
+			// Debug: System.out.println("Problem in XML Parsing of tag:
+			// "+tagElement);
 			return null;
 		}
 	}
 
-	private void getNextWord() {
-		if (parsedWordsIterator < parsedWords.size()) {
-			parsedWordsIterator++;
-			word = parsedWords.get(parsedWordsIterator);
-			//Debug: System.out.println("Got Next Word: "+word);
-		} else {
-			word = "\0";
-		}
-	}
-	
 	private Boolean isNextWordReceiptId() {
 		getNextWord();
-		if (word.equals("<ReceiptID>")){
+		if (word.equals("<ReceiptID>")) {
 			parsedWordsIterator = parsedWordsIterator - 2;
 			getNextWord();
 			return (true);
@@ -201,46 +129,21 @@ public class XmlParser {
 			return (false);
 		}
 	}
-	
-	private void consumePerson(){
+
+	private void consumePerson() {
 		word = parsedWords.get(0);
 
-		if( word.equals("<Person>")){
-			//System.out.println("Person correctly consumed");
+		if (word.equals("<Person>")) {
+			// System.out.println("Person correctly consumed");
 		}
 	}
-	
-	private void consumeReceipt(){
+
+	private void consumeReceipt() {
 
 		getNextWord();
-		
-		if( word.equals("<Receipt>")){
-			//System.out.println("Receipt correctly consumed");
+
+		if (word.equals("<Receipt>")) {
+			// System.out.println("Receipt correctly consumed");
 		}
-	}
-	
-	// Person Getters:
-	public ArrayList<Receipt> getReceiptsList() {
-		return receiptsList;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public Integer getAfm() {
-		return afmFinal;
-	}
-
-	public Double getIncome() {
-		return incomeFinal;
-	}
-
-	public String getCategory() {
-		return status;
 	}
 }

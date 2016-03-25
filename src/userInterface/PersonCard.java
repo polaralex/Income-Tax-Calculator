@@ -35,6 +35,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.border.TitledBorder;
 
+import dataExport.BarChart;
+import dataExport.PieChart;
+
 public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	
 	private Person person;
@@ -43,6 +46,8 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	private JButton buttonClose;
 	private JButton buttonAddReceipt;
 	private JButton buttonDeleteReceipt;
+	private JButton buttonShowPieChart;
+	private JButton buttonShowBarChart;
 	private JTextArea textId;
 	private JTextArea textAreaName;
 	private JTextArea textAreaSurname;
@@ -108,11 +113,15 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		buttonClose = new JButton("Close");
 		buttonAddReceipt = new JButton("Add");
 		buttonDeleteReceipt = new JButton("Delete");
+		buttonShowPieChart = new JButton("Tax Chart");
+		buttonShowBarChart = new JButton("Bar Chart");
 		
 		buttonSaveChanges.addActionListener(this);
 		buttonClose.addActionListener(this);
 		buttonAddReceipt.addActionListener(this);
 		buttonDeleteReceipt.addActionListener(this);
+		buttonShowPieChart.addActionListener(this);
+		buttonShowBarChart.addActionListener(this);
 		
 		// Person placeholder image initialization:
 		BufferedImage myPicture = null;
@@ -160,19 +169,22 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		scrollReceiptsPanel.setViewportView(receiptsPanel);
 		
 		addGridItem(panel, personTypeLabel, 0, 0, 2, 1, GridBagConstraints.CENTER);
-		addGridItem(panel, picLabel, 0, 1, 2, 2, GridBagConstraints.CENTER);
-		addGridItem(panel, wrapperName, 2, 0, 2, 1, GridBagConstraints.CENTER);
-		addGridItem(panel, wrapperSurname, 2, 1, 2, 1, GridBagConstraints.CENTER);
-		addGridItem(panel, wrapperIncome, 2, 2, 2, 1, GridBagConstraints.CENTER);
-		addGridItem(panel, wrapperId, 2, 3, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, picLabel, 0, 1, 2, 4, GridBagConstraints.CENTER);
+		addGridItem(panel, wrapperName, 2, 1, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, wrapperSurname, 2, 2, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, wrapperIncome, 2, 3, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, wrapperId, 2, 4, 2, 1, GridBagConstraints.CENTER);
 		
-		addGridItem(panel, wrapperTax, 4, 0, 2, 1, GridBagConstraints.CENTER);
-		addGridItem(panel, scrollReceiptsPanel, 4, 1, 2, 2, GridBagConstraints.SOUTH);
-		addGridItem(panel, buttonAddReceipt, 4, 3, 1, 1, GridBagConstraints.NORTHWEST);
-		addGridItem(panel, buttonDeleteReceipt, 5, 3, 1, 1, GridBagConstraints.NORTHEAST);
+		addGridItem(panel, wrapperTax, 4, 1, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, scrollReceiptsPanel, 4, 2, 2, 2, GridBagConstraints.CENTER);
+		addGridItem(panel, buttonAddReceipt, 4, 4, 1, 1, GridBagConstraints.PAGE_START);
+		addGridItem(panel, buttonDeleteReceipt, 5, 4, 1, 1, GridBagConstraints.PAGE_START);
+				
+		addGridItem(panel, buttonSaveChanges, 0, 5, 1, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, buttonClose, 1, 5, 1, 1, GridBagConstraints.CENTER);
 		
-		addGridItem(panel, buttonSaveChanges, 0, 4, 1, 1, GridBagConstraints.CENTER);
-		addGridItem(panel, buttonClose, 1, 4, 1, 2, GridBagConstraints.CENTER);
+		addGridItem(panel, buttonShowPieChart, 4, 5, 1, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, buttonShowBarChart, 5, 5, 1, 1, GridBagConstraints.CENTER);
 				
 		this.add(panel);
 		this.pack();
@@ -208,6 +220,16 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 			if ( receiptsPanel.isAnyListCellSelected() == true ){
 				receiptsPanel.deleteSelectedCell();
 			}
+			
+		} else if ( e.getSource().equals(buttonShowPieChart) ) {
+			
+			PieChart pieChart = new PieChart("Income Tax Calculator",
+					person.getFirstName()+" "+person.getLastName()+"'s Expenses Breakdown.", person);
+			
+		} else if ( e.getSource().equals(buttonShowBarChart) ) {
+			
+			BarChart barChart = new BarChart("Income Tax Calculator",
+					person.getFirstName()+" "+person.getLastName()+"'s Tax Calculation.", person);
 		}
 	}
 	

@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import dataInput.InputFileParser;
+import dataInput.TextFileParser;
 import dataInput.XmlEncoder;
 import dataInput.XmlParser;
 
@@ -48,7 +50,7 @@ public class MainScreen extends GridBagBasedScreen {
 	private JButton buttonDeletePerson;
 	private JButton buttonClose;
 	private String[] personTypes = { "Married Filing Jointly", "Married Filing Seperately", "Head of Household", "Single" };
-	XmlParser xmlParser;
+	XmlParser inputFileParser;
 	String filename = "";
 	JFileChooser fileChooser;
 	Person selectedObject;
@@ -101,7 +103,6 @@ public class MainScreen extends GridBagBasedScreen {
 		
 		// People Manager Initialization:
 		peopleManager = new PeopleManager();
-		peopleManager.testCreatePersons();
 
 		//List model initialization:
 		list = new JList();
@@ -157,14 +158,21 @@ public class MainScreen extends GridBagBasedScreen {
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
 						
 						filename = fileChooser.getSelectedFile().getAbsolutePath();
-						xmlParser = new XmlParser(new File(filename));
 						
-						String firstname = xmlParser.getFirstname();
-						String lastname = xmlParser.getLastname();
-						String category = xmlParser.getCategory();
-						Integer afm = xmlParser.getAfm();
-						Double income = xmlParser.getIncome();
-						ArrayList<Receipt> receiptList = xmlParser.getReceiptsList();
+						InputFileParser inputFileParser;
+						
+						if( filename.substring(filename.lastIndexOf(".") + 1).equals("xml") ){
+							inputFileParser = new XmlParser(new File(filename));
+						} else {
+							inputFileParser = new TextFileParser(new File(filename));
+						}
+												
+						String firstname = inputFileParser.getFirstname();
+						String lastname = inputFileParser.getLastname();
+						String category = inputFileParser.getCategory();
+						Integer afm = inputFileParser.getAfm();
+						Double income = inputFileParser.getIncome();
+						ArrayList<Receipt> receiptList = inputFileParser.getReceiptsList();
 						
 						Person newPerson = peopleManager.createNewPerson(category, firstname, lastname, afm, income);
 						
@@ -177,7 +185,7 @@ public class MainScreen extends GridBagBasedScreen {
 					}
 				} else if ( e.getSource() == buttonExport ) {
 					
-					if (list.getSelectedIndex() > 0) {
+					if (list.getSelectedIndex() >= 0) {
 						
 						Person personObject = model.getPersonAt(list.getSelectedIndex());
 						String personAfm = personObject.getIdentifyingNumber().toString();

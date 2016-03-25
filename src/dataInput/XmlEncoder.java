@@ -3,7 +3,10 @@ package dataInput;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import dataManagement.Person;
 import dataManagement.Receipt;
@@ -46,8 +49,12 @@ public class XmlEncoder {
 		if ((receiptsList != null) && (receiptsList.isEmpty() == false)) {
 			
 			for(Receipt receipt : receiptsList) {
+				
 				writeTag("ReceiptID", receipt.getReceiptId().toString());
-				writeTag("Date", receipt.getDateOfIssue().toString()); //TODO: FIX THE DATE FORMAT
+				
+				DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+				writeTag("Date", format.format(receipt.getDateOfIssue()));
+				
 				writeTag("Kind", receipt.getCategory());
 				writeTag("Amount", receipt.getAmount().toString());
 				writeTag("Company", receipt.getCompany().getName());
