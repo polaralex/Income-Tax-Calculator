@@ -21,8 +21,6 @@ public class XmlParser extends InputFileParser {
 
 	void parsePersonData() {
 
-		// Consume the <Person> opening tag:
-		consumePerson();
 		name = checkInsideTag("Name").trim();
 		afm = checkInsideTag("AFM").trim();
 		status = checkInsideTag("Status").trim();
@@ -36,10 +34,6 @@ public class XmlParser extends InputFileParser {
 		lastname = splittedName[1];
 		afmFinal = Integer.parseInt(afm);
 		incomeFinal = Double.parseDouble(income);
-
-		// Consume the <Person> closing tag:
-		getNextWord();
-
 	}
 
 	void parseReceiptData() {
@@ -72,24 +66,17 @@ public class XmlParser extends InputFileParser {
 			Company companyFinal = new Company(company, street + " " + addressNumber + ", " + city + ", " + country);
 
 			receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
-
-			// Debugging:
-			// System.out.println(receiptId+" "+date+" "+kind+" "+amount+"
-			// "+company+" "+country+" "+city+" "+street+" "+addressNumber);
-			// System.out.println("Receipts List Size: "+receiptsList.size());
 		}
 	}
 
 	private String checkInsideTag(String tagElement) {
 
 		getNextWord();
-		// Debug: System.out.println("Element: "+ tagElement+ ", Word: "+ word
-		// +", Iterator: " + parsedWordsIterator);
+
 		String currentWord = "";
 
 		if (word.equals("<" + tagElement + ">")) {
 
-			// Debug: System.out.println("The word is a starting tag.");
 			getNextWord();
 
 			while (!(word.equalsIgnoreCase("</" + tagElement + ">"))) {
@@ -97,13 +84,9 @@ public class XmlParser extends InputFileParser {
 				getNextWord();
 			}
 
-			// Debug: System.out.println("The word is a closing tag.");
-
 			return currentWord;
 
 		} else {
-			// Debug: System.out.println("Problem in XML Parsing of tag:
-			// "+tagElement);
 			return null;
 		}
 	}
@@ -119,20 +102,7 @@ public class XmlParser extends InputFileParser {
 		}
 	}
 
-	private void consumePerson() {
-		word = parsedWords.get(0);
-
-		if (word.equals("<Person>")) {
-			// System.out.println("Person correctly consumed");
-		}
-	}
-
 	private void consumeReceipt() {
-
 		getNextWord();
-
-		if (word.equals("<Receipt>")) {
-			// System.out.println("Receipt correctly consumed");
-		}
 	}
 }

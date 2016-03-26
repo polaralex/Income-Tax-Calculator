@@ -1,34 +1,21 @@
 package dataInput;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import dataManagement.Company;
-import dataManagement.HeadOfHousehold;
-import dataManagement.MarriedFilingJointly;
-import dataManagement.MarriedFilingSeperately;
-import dataManagement.PeopleManager;
-import dataManagement.Person;
 import dataManagement.Receipt;
-import dataManagement.Single;
-
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class TextFileParser extends InputFileParser {
 	
 	public TextFileParser(File filename) {
-		
 		tokenizeInput(filename);
 	    parsePersonData();
 	    parseReceiptData();
-	    
 	}
 	
 	void parsePersonData() {
@@ -47,12 +34,11 @@ public class TextFileParser extends InputFileParser {
 		lastname = splittedName[1];
 		afmFinal = Integer.parseInt(afm);
 		incomeFinal = Double.parseDouble(income);
-
 	}
 	
 	void parseReceiptData() {
 		
-		consumeReceipts();
+		consumeReceiptsLabel();
 		
 		while ( isNextWordReceiptId() ) {
 						
@@ -80,17 +66,13 @@ public class TextFileParser extends InputFileParser {
 			Company companyFinal = new Company(company, street + " " + addressNumber + ", " + city + ", " + country);
 			
 			receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
-			
-			// Debugging:
-				//System.out.println(receiptId+" "+date+" "+kind+" "+amount+" "+company+" "+country+" "+city+" "+street+" "+addressNumber);
-				//System.out.println("Receipts List Size: "+receiptsList.size());
 		}
 	}
 	
 	private String checkLabel(String tagElement) {
 		
 		getNextWord();
-		System.out.println("Searching for: "+ tagElement+ ", Current word: "+ word +", Parsed Words Iterator: " + parsedWordsIterator);
+
 		String currentWord = "";
 		
 		if(word.equals(tagElement+":")){
@@ -106,9 +88,7 @@ public class TextFileParser extends InputFileParser {
 			}
 			
 			goToPreviousWord();
-			
-			System.out.println("After End of Loop Current Word: "+currentWord);
-			
+						
 			return currentWord;
 			
 		} else {
@@ -117,27 +97,27 @@ public class TextFileParser extends InputFileParser {
 	}
 
 	private Boolean isNextWordReceiptId() {
+		
 		getNextWord();
+		
 		if (word.equals("Receipt")){
 			
 			getNextWord();
 			
 			if(word.equals("ID:")){
+				
 				goToPreviousWord();
 				return (true);
+				
 			}	
+			
 		} else {
 			return (false);
 		}
 		return (false);
 	}
 	
-	private void consumeReceipts(){
-
+	private void consumeReceiptsLabel(){
 		getNextWord();
-		
-		if( word.equals("Receipts:")){
-			System.out.println("'Receipts' correctly consumed");
-		}
 	}
 }
