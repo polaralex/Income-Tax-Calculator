@@ -3,40 +3,13 @@ package dataManagement;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.JOptionPane;
-
+import dataInput.XmlEncoder;
 import dataManagement.Person;
 import dataManagement.Single;
 
 public class PeopleManager {
 	
-	//Create basic Objects for Testing:
 	ArrayList<Person> personList = new ArrayList<Person>();
-	
-	public void testCreatePersons() {
-			
-		// Create Person Objects:
-		personList.add(new Single("Alex", "Emexezidis", 1, 1200));
-		personList.add(new Single("Maria", "Arnaoutaki", 2, 1300));
-		personList.add(new MarriedFilingJointly("Larry", "Ioannidis", 3, 1039));
-		personList.add(new MarriedFilingSeperately("Basilis", "Sideropoulos", 4, 3000));
-		personList.add(new HeadOfHousehold("Kostas", "Konstantinou", 5, 295000));
-		personList.add(new Single("Giannis", "Parios", 6, 35000));
-		personList.add(new Single("Maria", "Farantouki", 7, 83000));	
-		
-		// Create Receipt Objects and add them to people:
-		Date date = new Date();
-		personList.get(1).addReceipt(new Receipt(1, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(2, date, "Travel", 120d, companyCreator("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(5, date, "Travel", 100d, companyCreator("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(6, date, "Travel", 10d, companyCreator("Attiki Odos","Athens")));
-		personList.get(1).addReceipt(new Receipt(7, date, "Travel", 100d, companyCreator("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(8, date, "Basic", 100d, companyCreator("Shell","Ioannina")));
-		personList.get(1).addReceipt(new Receipt(9, date, "Health", 100d, companyCreator("Shell","Ioannina")));
-		personList.get(2).addReceipt(new Receipt(3, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
-		personList.get(3).addReceipt(new Receipt(4, date, "Other", 55d, companyCreator("Basilopoulos","Ioannina")));
-		
-	}
 	
 	public ArrayList<Person> getPersonList () {
 		return personList;
@@ -104,6 +77,41 @@ public class PeopleManager {
 		}
 		
 		return null;
+	}
+	
+	public static void savePersonToFile (Person personToSave, String filenameToSave) {
+		XmlEncoder xmlEncoder = new XmlEncoder(filenameToSave, personToSave);
+	}
+	
+	public static String getPersonSuggestedXMLFilename (Person personToSave) {
+		return (personToSave.getIdentifyingNumber().toString()+"_INFO.xml");
+	}
+	
+	public static String getPersonSuggestedTXTFilename (Person personToSave) {
+		return (personToSave.getIdentifyingNumber().toString()+"_INFO.txt");
+	}
+	
+	public void testCreatePersons() {
+		
+		personList.add(new Single("Alex", "Emexezidis", 1, 1200));
+		personList.add(new Single("Maria", "Arnaoutaki", 2, 1300));
+		personList.add(new MarriedFilingJointly("Larry", "Ioannidis", 3, 1039));
+		personList.add(new MarriedFilingSeperately("Basilis", "Sideropoulos", 4, 3000));
+		personList.add(new HeadOfHousehold("Kostas", "Konstantinou", 5, 295000));
+		personList.add(new Single("Giannis", "Parios", 6, 35000));
+		personList.add(new Single("Maria", "Farantouki", 7, 83000));	
+		
+		Date date = new Date();
+		personList.get(1).addReceipt(new Receipt(1, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(2, date, "Travel", 120d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(5, date, "Travel", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(6, date, "Travel", 10d, companyCreator("Attiki Odos","Athens")));
+		personList.get(1).addReceipt(new Receipt(7, date, "Travel", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(8, date, "Basic", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(1).addReceipt(new Receipt(9, date, "Health", 100d, companyCreator("Shell","Ioannina")));
+		personList.get(2).addReceipt(new Receipt(3, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
+		personList.get(3).addReceipt(new Receipt(4, date, "Other", 55d, companyCreator("Basilopoulos","Ioannina")));
+		
 	}
 	
 }

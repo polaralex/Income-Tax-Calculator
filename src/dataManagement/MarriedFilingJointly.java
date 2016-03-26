@@ -1,7 +1,5 @@
 package dataManagement;
 
-import java.util.ArrayList;
-
 public class MarriedFilingJointly extends Person {
 
 	public MarriedFilingJointly(String firstName, String lastName, Integer identifyingNumber, Object income) {

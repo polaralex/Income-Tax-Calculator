@@ -1,20 +1,15 @@
 package userInterface;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -26,13 +21,11 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
+import dataManagement.PeopleManager;
 import dataManagement.Person;
-import dataManagement.Receipt;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.border.TitledBorder;
 
 import dataExport.BarChart;
@@ -124,15 +117,15 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		buttonShowBarChart.addActionListener(this);
 		
 		// Person placeholder image initialization:
-		BufferedImage myPicture = null;
+		BufferedImage personPicture = null;
 		
 		try {
-			myPicture = ImageIO.read(getClass().getResourceAsStream("/res/icon-user-small.png"));
+			personPicture = ImageIO.read(getClass().getResourceAsStream("/res/icon-user-small.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+		JLabel picLabel = new JLabel(new ImageIcon(personPicture));
 		picLabel.setMaximumSize(new Dimension(200,200));
 		
 		// Set up the Grid Bag Layout:
@@ -159,7 +152,6 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		wrapperTax.setBorder(new TitledBorder("Calculated Tax:"));
 		wrapperTax.add(textTaxAfterReceipts);
 		
-		// Receipts Panel initialization:
 		receiptsPanel = new ReceiptsPanel(person.getReceiptsList());
 		
 		// Add the receipts FlowLayout inside the Titled border Panel:
@@ -194,6 +186,8 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		textAreaName.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		textAreaSurname.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		textIncome.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		
+		textTaxAfterReceipts.setEditable(false);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -214,6 +208,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		} else if ( e.getSource().equals(buttonAddReceipt) ) {
 			
 			AddReceiptScreen addReceiptScreen = new AddReceiptScreen(receiptsPanel.getModel());
+			PeopleManager.savePersonToFile(person, PeopleManager.getPersonSuggestedXMLFilename(person));
 			
 		} else if ( e.getSource().equals(buttonDeleteReceipt) ) {
 			

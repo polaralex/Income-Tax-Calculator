@@ -31,15 +31,11 @@ public class XmlEncoder {
 	
 	private void personToTagConverted(Person person) {
 		
-		writeOpeningTag("Person");
-		
 		writeTag("Name", person.getFirstName()+" "+person.getLastName());
 		writeTag("AFM", person.getIdentifyingNumber().toString());
 		writeTag("Status", person.getPersonType());
 		writeTag("Income", person.getIncome().toString());
 		
-		writeClosingTag("Person");
-
 	}
 	
 	private void receiptsToTagConverted(ArrayList<Receipt> receiptsList) {

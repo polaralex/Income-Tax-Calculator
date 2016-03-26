@@ -97,14 +97,11 @@ public class MainScreen extends GridBagBasedScreen {
 			}
 		});
 		
-		// Top Description Text:
 		mainLabelText = new JLabel("List of People and Tax Data:");
 		mainLabelText.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		
-		// People Manager Initialization:
 		peopleManager = new PeopleManager();
 
-		//List model initialization:
 		list = new JList();
 		list.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		model = new PersonListModel();
@@ -188,14 +185,14 @@ public class MainScreen extends GridBagBasedScreen {
 					if (list.getSelectedIndex() >= 0) {
 						
 						Person personObject = model.getPersonAt(list.getSelectedIndex());
-						String personAfm = personObject.getIdentifyingNumber().toString();
 						fileChooser = new JFileChooser();
-						fileChooser.setSelectedFile(new File(personAfm+"_INFO.txt"));
+						fileChooser.setSelectedFile(new File(PeopleManager.getPersonSuggestedXMLFilename(personObject)));
 						int returnVal = fileChooser.showSaveDialog(frame);
 						
 						if(returnVal == JFileChooser.APPROVE_OPTION) {
+							
 							filename = fileChooser.getSelectedFile().getAbsolutePath();
-							XmlEncoder xmlEncoder = new XmlEncoder(filename, personObject);
+							peopleManager.savePersonToFile(personObject, filename);
 							JOptionPane.showMessageDialog(frame, "The file "+filename+" was saved to disk.");
 						}
 					}

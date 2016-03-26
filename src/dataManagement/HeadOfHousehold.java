@@ -1,7 +1,5 @@
 package dataManagement;
 
-import java.util.ArrayList;
-
 public class HeadOfHousehold extends Person {
 
 	public HeadOfHousehold(String firstName, String lastName, Integer identifyingNumber, Object income) {

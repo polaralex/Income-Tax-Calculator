@@ -29,18 +29,16 @@ public abstract class Person {
 	}
 	
 	public Person () {
-		this.firstName = " ";
-		this.lastName = " ";
+		this.firstName = "";
+		this.lastName = "";
 		Double idNumberDouble = (Math.random() * ( 999999999 - 100000000 ));
 		this.identifyingNumber = idNumberDouble.intValue();
 		this.income = 0d;
 	}
 	
-	// Abstract Functions:
 	public abstract Double calculateTaxBeforeReceipts();
 	public abstract String getPersonType();
 	
-	// Functions:
 	public Double calculateTax() {
 		
 		Double receiptAmount = calculateReceiptAmount();
@@ -69,7 +67,6 @@ public abstract class Person {
 		return (receiptsAmount);
 	}
 		
-	// Getters and Setters:
 	public String getFirstName() {
 		return firstName;
 	}
