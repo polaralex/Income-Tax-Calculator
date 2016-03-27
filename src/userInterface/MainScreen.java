@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import dataInput.InputFileParser;
+import dataInput.InputOutputManager;
 import dataInput.TextFileParser;
 import dataInput.XmlEncoder;
 import dataInput.XmlParser;
@@ -147,54 +148,14 @@ public class MainScreen extends GridBagBasedScreen {
 					
 				} else if ( e.getSource() == buttonImportPerson ) {
 					
-					fileChooser = new JFileChooser();
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("XML and TXT files", "xml", "txt");
-					fileChooser.setFileFilter(filter);
-					int returnVal = fileChooser.showOpenDialog(frame);
+					showFileImportDialog();
 					
-					if(returnVal == JFileChooser.APPROVE_OPTION) {
-						
-						filename = fileChooser.getSelectedFile().getAbsolutePath();
-						
-						InputFileParser inputFileParser;
-						
-						if( filename.substring(filename.lastIndexOf(".") + 1).equals("xml") ){
-							inputFileParser = new XmlParser(new File(filename));
-						} else {
-							inputFileParser = new TextFileParser(new File(filename));
-						}
-												
-						String firstname = inputFileParser.getFirstname();
-						String lastname = inputFileParser.getLastname();
-						String category = inputFileParser.getCategory();
-						Integer afm = inputFileParser.getAfm();
-						Double income = inputFileParser.getIncome();
-						ArrayList<Receipt> receiptList = inputFileParser.getReceiptsList();
-						
-						Person newPerson = peopleManager.createNewPerson(category, firstname, lastname, afm, income);
-						
-						if (!receiptList.equals(null)){
-							newPerson.addReceiptsList(receiptList);
-						}
-						
-						model.addElement(newPerson);
-												
-					}
 				} else if ( e.getSource() == buttonExport ) {
 					
 					if (list.getSelectedIndex() >= 0) {
 						
 						Person personObject = model.getPersonAt(list.getSelectedIndex());
-						fileChooser = new JFileChooser();
-						fileChooser.setSelectedFile(new File(PeopleManager.getPersonSuggestedXMLFilename(personObject)));
-						int returnVal = fileChooser.showSaveDialog(frame);
-						
-						if(returnVal == JFileChooser.APPROVE_OPTION) {
-							
-							filename = fileChooser.getSelectedFile().getAbsolutePath();
-							peopleManager.savePersonToFile(personObject, filename);
-							JOptionPane.showMessageDialog(frame, "The file "+filename+" was saved to disk.");
-						}
+						showFileSaveDialog(personObject);
 					}
 					
 				} else if ( e.getSource() == buttonClose ) {
@@ -236,5 +197,32 @@ public class MainScreen extends GridBagBasedScreen {
 		};
 		    
 		list.addMouseListener(mouseListener);
+	}
+	
+	protected void showFileSaveDialog(Person personObject) {
+		
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedXMLFilename(personObject)));
+		int returnVal = fileChooser.showSaveDialog(frame);
+		
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			
+			InputOutputManager.savePersonToXMLFile(personObject, fileChooser.getSelectedFile());
+			JOptionPane.showMessageDialog(frame, "The file "+fileChooser.getSelectedFile().getName()+" was saved to disk.");
+		}
+	}
+	
+	protected void showFileImportDialog() {
+		
+		fileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML and TXT files", "xml", "txt");
+		fileChooser.setFileFilter(filter);
+		int returnVal = fileChooser.showOpenDialog(frame);
+		
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+						
+			Person importedPerson = InputOutputManager.importPersonFromFile(fileChooser.getSelectedFile());
+			model.addElement(importedPerson);		
+		}
 	}
 }

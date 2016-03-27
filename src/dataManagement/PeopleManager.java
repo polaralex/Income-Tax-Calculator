@@ -3,7 +3,6 @@ package dataManagement;
 import java.util.ArrayList;
 import java.util.Date;
 
-import dataInput.XmlEncoder;
 import dataManagement.Person;
 import dataManagement.Single;
 
@@ -15,7 +14,7 @@ public class PeopleManager {
 		return personList;
 	}
 	
-	public Person createNewPerson (int category, String firstName, String lastName, Integer identifyingNumber, Double income){
+	public static Person createNewPerson (int category, String firstName, String lastName, Integer identifyingNumber, Double income){
 	
 		if (category == Person.MARRIED_FILING_JOINTLY) {
 			 return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
@@ -31,7 +30,7 @@ public class PeopleManager {
 		return(new Single(" ", " ", 0, 0));
 	}
 	
-	public Person createNewPerson (String categoryBeforeTrim, String firstName, String lastName, Integer identifyingNumber, Double income){
+	public static Person createNewPerson (String categoryBeforeTrim, String firstName, String lastName, Integer identifyingNumber, Double income){
 		
 		String category = categoryBeforeTrim.trim();
 		
@@ -79,18 +78,6 @@ public class PeopleManager {
 		return null;
 	}
 	
-	public static void savePersonToFile (Person personToSave, String filenameToSave) {
-		XmlEncoder xmlEncoder = new XmlEncoder(filenameToSave, personToSave);
-	}
-	
-	public static String getPersonSuggestedXMLFilename (Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString()+"_INFO.xml");
-	}
-	
-	public static String getPersonSuggestedTXTFilename (Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString()+"_INFO.txt");
-	}
-	
 	public void testCreatePersons() {
 		
 		personList.add(new Single("Alex", "Emexezidis", 1, 1200));
@@ -113,5 +100,4 @@ public class PeopleManager {
 		personList.get(3).addReceipt(new Receipt(4, date, "Other", 55d, companyCreator("Basilopoulos","Ioannina")));
 		
 	}
-	
 }

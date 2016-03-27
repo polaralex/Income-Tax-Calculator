@@ -1,5 +1,6 @@
 package dataManagement;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public abstract class Person {
@@ -15,6 +16,8 @@ public abstract class Person {
 	private Integer identifyingNumber;
 	private Double income;
 	private ArrayList<Receipt> receipts = new ArrayList<Receipt>();
+	
+	private File file = null; 
 	
 	public Person (String firstName, String lastName, Integer identifyingNumber, Object income) {
 		this.firstName = firstName;
@@ -90,6 +93,12 @@ public abstract class Person {
 	}
 	public void setIncome(Double income) {
 		this.income = income;
+	}
+	public File getFile() {
+		return file;
+	}
+	public void setFile(File file) {
+		this.file = file;
 	}
 	
 	public void addReceipt (Receipt receipt) {
