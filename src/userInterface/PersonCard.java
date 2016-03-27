@@ -21,7 +21,6 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
-import dataManagement.PeopleManager;
 import dataManagement.Person;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -65,7 +64,6 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 				}
 			}
 		});
-		
 	}
 	
 	public void showCard() {
@@ -132,7 +130,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		// Set up the Grid Bag Layout:
 		new GridBagConstraints();
 		
-		// We put a "title" wrapper around the JTextAreas:
+		// Put a "title" wrapper around the JTextAreas:
 		JPanel wrapperName = new JPanel(new BorderLayout());
 		wrapperName.setBorder(new TitledBorder("First Name:"));
 		wrapperName.add(textAreaName);

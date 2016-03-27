@@ -50,11 +50,8 @@ public abstract class InputFileParser {
 		    	} else {
 		    		readWords = readWords+" "+readLine;
 		    	}
-		    	
 		    }
-		    
-		    System.out.println(readWords);
-		    
+		    		    
 		    // Now we want to split the lines string in words:
 		    if ( readWords != null) {
 		    	String[] splited;
@@ -65,12 +62,6 @@ public abstract class InputFileParser {
 		            }
 		        }
 		    }
-		    
-		    // For Debugging:
-		    for (int i=0; i<parsedWords.size(); i++){
-		    	System.out.println(i+": "+parsedWords.get(i));
-		    }
-		    
 		} catch (IOException e) {
 		    System.out.println("There was a problem: " + e);
 		    e.printStackTrace();
@@ -106,7 +97,6 @@ public abstract class InputFileParser {
 		}
 	}
 	
-	// Person Getters:
 	public ArrayList<Receipt> getReceiptsList() {
 		return receiptsList;
 	}
@@ -130,5 +120,4 @@ public abstract class InputFileParser {
 	public String getCategory() {
 		return status;
 	}
-
 }

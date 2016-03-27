@@ -3,6 +3,11 @@ package dataInput;
 import java.io.File;
 import java.util.ArrayList;
 
+import dataExport.LogFileTxtEncoder;
+import dataExport.LogFileXmlEncoder;
+import dataExport.OutputFileEncoder;
+import dataExport.TxtEncoder;
+import dataExport.XmlEncoder;
 import dataManagement.PeopleManager;
 import dataManagement.Person;
 import dataManagement.Receipt;
@@ -15,30 +20,47 @@ public class InputOutputManager {
 		if ( getFileExtension(file).equals("txt") ) {
 			savePersonToTXTFile(personToSave, file);
 		} else if ( getFileExtension(file).equals("xml") ) {
-			savePersonToXMLFile(personToSave, file);
+			savePersonToXmlFile(personToSave, file);
+		}
+	}
+	
+	public static void savePersonToLogFile (Person personToSave, File file) {
+		
+		if ( getFileExtension(file).equals("txt") ) {
+			saveLogAsTxtFile(personToSave, file);
+		} else if ( getFileExtension(file).equals("xml") ) {
+			saveLogAsXmlFile(personToSave, file);
 		}
 	}
 	
 	public static void updatePersonFile (Person personToSave) {
 		
-		// An update will happen only if a file already exists (has been saved previously).
-		//I use the .length() method, because otherwise it would throw a null pointer exception:
+		// An update will happen only if a file already exists (has been saved previously):
 		if (!(personToSave.getFile() == null)){
 			savePersonToFile(personToSave, personToSave.getFile());
 		}
 	}
 	
-	public static void savePersonToXMLFile (Person personToSave, File file) {
+	public static void savePersonToXmlFile (Person personToSave, File file) {
 		
-		XmlEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), personToSave);
+		OutputFileEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), personToSave);
 		personToSave.setFile(file);
 	}
 	
 	public static void savePersonToTXTFile (Person personToSave, File file) {
 		
-		// TODO: Change this to TxtEncoder
-		XmlEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), personToSave);
+		OutputFileEncoder txtEncoder = new TxtEncoder(file.getAbsolutePath(), personToSave);
 		personToSave.setFile(file);
+	}
+	
+	public static void saveLogAsXmlFile (Person personToSave, File file) {
+			
+		OutputFileEncoder logFileXmlEncoder = new LogFileXmlEncoder(file.getAbsolutePath(), personToSave);
+	}
+
+	public static void saveLogAsTxtFile (Person personToSave, File file) {
+		
+		OutputFileEncoder logFileTxtEncoder = new LogFileTxtEncoder(file.getAbsolutePath(), personToSave);
 	}
 	
 	public static Person importPersonFromFile(File file) {
@@ -73,8 +95,12 @@ public class InputOutputManager {
 		return (personToSave.getIdentifyingNumber().toString()+"_INFO.xml");
 	}
 	
-	public static String getPersonSuggestedTXTFilename (Person personToSave) {
+	public static String getPersonSuggestedTxtFilename (Person personToSave) {
 		return (personToSave.getIdentifyingNumber().toString()+"_INFO.txt");
+	}
+	
+	public static String getPersonSuggestedTxtLogFilename (Person personToSave) {
+		return (personToSave.getIdentifyingNumber().toString()+"_LOG.txt");
 	}
 	
 	private static String getFileExtension(File file) {

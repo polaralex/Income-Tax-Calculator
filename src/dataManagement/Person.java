@@ -56,15 +56,29 @@ public abstract class Person {
 		} else {
 			return( taxBeforeReceipts - (taxBeforeReceipts * 0.3) );
 		}
-		
 	}
 	
+	// This one gives the total amount:
 	public Double calculateReceiptAmount(){
 		
 		Double receiptsAmount = 0d;
 		
 		for( int i=0; i<receipts.size(); i++ ){
 			receiptsAmount = receiptsAmount + receipts.get(i).getAmount();
+		}
+		
+		return (receiptsAmount);
+	}
+	
+	// Polymorphic alternative that gives the total of a specific category:
+	public Double calculateReceiptAmount(String category){
+		
+		Double receiptsAmount = 0d;
+		
+		for(Receipt receipt : receipts){
+			if(receipt.getCategory().equals(category)){
+				receiptsAmount = receiptsAmount + receipt.getAmount();
+			}
 		}
 		
 		return (receiptsAmount);

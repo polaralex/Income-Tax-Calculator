@@ -28,10 +28,10 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import dataExport.XmlEncoder;
 import dataInput.InputFileParser;
 import dataInput.InputOutputManager;
 import dataInput.TextFileParser;
-import dataInput.XmlEncoder;
 import dataInput.XmlParser;
 
 import javax.swing.JButton;
@@ -51,6 +51,7 @@ public class MainScreen extends GridBagBasedScreen {
 	private JButton buttonDeletePerson;
 	private JButton buttonClose;
 	private String[] personTypes = { "Married Filing Jointly", "Married Filing Seperately", "Head of Household", "Single" };
+	private String[] exportTypes = { "Full Data File", "Summary Log" };
 	XmlParser inputFileParser;
 	String filename = "";
 	JFileChooser fileChooser;
@@ -152,10 +153,13 @@ public class MainScreen extends GridBagBasedScreen {
 					
 				} else if ( e.getSource() == buttonExport ) {
 					
-					if (list.getSelectedIndex() >= 0) {
-						
-						Person personObject = model.getPersonAt(list.getSelectedIndex());
-						showFileSaveDialog(personObject);
+					Object typeOfExport = (String)JOptionPane.showInputDialog(frame, "Choose the type of Export:",
+							"Export a Person as File", JOptionPane.PLAIN_MESSAGE, null, exportTypes, exportTypes[0]);
+					
+					if ( typeOfExport.equals("Full Data File") ){
+						savePersonAsFullFile();
+					} else if ( typeOfExport.equals("Summary Log") ) {
+						savePersonAsLogFile();
 					}
 					
 				} else if ( e.getSource() == buttonClose ) {
@@ -199,6 +203,24 @@ public class MainScreen extends GridBagBasedScreen {
 		list.addMouseListener(mouseListener);
 	}
 	
+	private void savePersonAsFullFile() {
+		
+		if (list.getSelectedIndex() >= 0) {
+			
+			Person personObject = model.getPersonAt(list.getSelectedIndex());
+			showFileSaveDialog(personObject);
+		}
+	}
+	
+	private void savePersonAsLogFile() {
+		
+		if (list.getSelectedIndex() >= 0) {
+			
+			Person personObject = model.getPersonAt(list.getSelectedIndex());
+			showLogSaveDialog(personObject);
+		}
+	}
+	
 	protected void showFileSaveDialog(Person personObject) {
 		
 		JFileChooser fileChooser = new JFileChooser();
@@ -207,8 +229,21 @@ public class MainScreen extends GridBagBasedScreen {
 		
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			
-			InputOutputManager.savePersonToXMLFile(personObject, fileChooser.getSelectedFile());
+			InputOutputManager.savePersonToFile(personObject, fileChooser.getSelectedFile());
 			JOptionPane.showMessageDialog(frame, "The file "+fileChooser.getSelectedFile().getName()+" was saved to disk.");
+		}
+	}
+	
+	protected void showLogSaveDialog(Person personObject) {
+		
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedTxtLogFilename(personObject)));
+		int returnVal = fileChooser.showSaveDialog(frame);
+		
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			
+			InputOutputManager.savePersonToLogFile(personObject, fileChooser.getSelectedFile());
+			JOptionPane.showMessageDialog(frame, "The log file "+fileChooser.getSelectedFile().getName()+" was saved to disk.");
 		}
 	}
 	

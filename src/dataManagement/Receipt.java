@@ -19,17 +19,15 @@ public class Receipt {
 		this.company = company;
 	}
 	
-	// Functions:
 	private String getCorrectCategory (String category) {
 		
-		if ( category != "Basic" && category != "Entertainment" && category != "Travel" && category != "Health" && category != "Other") {
+		if ( !category.equals("Basic") && !category.equals("Entertainment") && !category.equals("Travel") && !category.equals("Health") && !category.equals("Other")) {
 			return "Other";
 		} else {
 			return category;
 		}
 	}
 	
-	// Getters and Setters:
 	public Integer getReceiptId() {
 		return receiptId;
 	}
@@ -69,5 +67,4 @@ public class Receipt {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
 }
