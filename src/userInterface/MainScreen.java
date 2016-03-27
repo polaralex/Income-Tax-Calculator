@@ -157,9 +157,9 @@ public class MainScreen extends GridBagBasedScreen {
 							"Export a Person as File", JOptionPane.PLAIN_MESSAGE, null, exportTypes, exportTypes[0]);
 					
 					if ( typeOfExport.equals("Full Data File") ){
-						savePersonAsFullFile();
+						savePersonAsType("Full");
 					} else if ( typeOfExport.equals("Summary Log") ) {
-						savePersonAsLogFile();
+						savePersonAsType("Log");
 					}
 					
 				} else if ( e.getSource() == buttonClose ) {
@@ -203,48 +203,46 @@ public class MainScreen extends GridBagBasedScreen {
 		list.addMouseListener(mouseListener);
 	}
 	
-	private void savePersonAsFullFile() {
+	private void savePersonAsType(String type) {
 		
 		if (list.getSelectedIndex() >= 0) {
 			
 			Person personObject = model.getPersonAt(list.getSelectedIndex());
-			showFileSaveDialog(personObject);
+			showSaveDialog(personObject, type);
 		}
 	}
 	
-	private void savePersonAsLogFile() {
-		
-		if (list.getSelectedIndex() >= 0) {
-			
-			Person personObject = model.getPersonAt(list.getSelectedIndex());
-			showLogSaveDialog(personObject);
-		}
-	}
-	
-	protected void showFileSaveDialog(Person personObject) {
-		
+	protected void showSaveDialog(Person personObject, String saveType) {
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedXMLFilename(personObject)));
+		
+		if (saveType.equals("Full")){
+			fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedXMLFilename(personObject)));
+		} else if (saveType.equals("Log")) {
+			fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedTxtLogFilename(personObject)));
+		}
+		
 		int returnVal = fileChooser.showSaveDialog(frame);
 		
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			
-			InputOutputManager.savePersonToFile(personObject, fileChooser.getSelectedFile());
-			JOptionPane.showMessageDialog(frame, "The file "+fileChooser.getSelectedFile().getName()+" was saved to disk.");
+			if ( saveType.equals("Full") ) {
+				saveFullFile(personObject, fileChooser.getSelectedFile());
+			} else if ( saveType.equals("Log") ) {
+				saveLogFile(personObject, fileChooser.getSelectedFile());
+			}
 		}
 	}
 	
-	protected void showLogSaveDialog(Person personObject) {
-		
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedTxtLogFilename(personObject)));
-		int returnVal = fileChooser.showSaveDialog(frame);
-		
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
+	protected void saveFullFile(Person personObject, File selectedFile) {
 			
-			InputOutputManager.savePersonToLogFile(personObject, fileChooser.getSelectedFile());
-			JOptionPane.showMessageDialog(frame, "The log file "+fileChooser.getSelectedFile().getName()+" was saved to disk.");
-		}
+			InputOutputManager.savePersonToFile(personObject, selectedFile);
+			JOptionPane.showMessageDialog(frame, "The data file was saved to disk.");
+	}
+	
+	protected void saveLogFile(Person personObject, File selectedFile) {
+
+			InputOutputManager.savePersonToLogFile(personObject, selectedFile);
+			JOptionPane.showMessageDialog(frame, "The log file was saved to disk.");
 	}
 	
 	protected void showFileImportDialog() {

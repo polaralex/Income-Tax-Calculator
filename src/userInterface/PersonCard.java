@@ -1,6 +1,7 @@
 package userInterface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -47,6 +48,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	private JTextArea textIncome;
 	private JTextArea textTaxAfterReceipts;
 	private JLabel personTypeLabel;
+	private JLabel fileSaveStateLabel;
 	
 	private ReceiptsPanel receiptsPanel;
 	
@@ -99,6 +101,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		textTaxAfterReceipts = new JTextArea(person.calculateTax().toString());
 		personTypeLabel = new JLabel("Category: "+ person.getPersonType());
 		personTypeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		fileSaveStateLabel = new JLabel("");
 		
 		// Buttons Initialization:
 		buttonSaveChanges = new JButton("Save");
@@ -160,6 +163,8 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		scrollReceiptsPanel.setViewportView(receiptsPanel);
 		
 		addGridItem(panel, personTypeLabel, 0, 0, 2, 1, GridBagConstraints.CENTER);
+		addGridItem(panel, fileSaveStateLabel, 5, 0, 1, 1, GridBagConstraints.CENTER);
+		
 		addGridItem(panel, picLabel, 0, 1, 2, 4, GridBagConstraints.CENTER);
 		addGridItem(panel, wrapperName, 2, 1, 2, 1, GridBagConstraints.CENTER);
 		addGridItem(panel, wrapperSurname, 2, 2, 2, 1, GridBagConstraints.CENTER);
@@ -176,6 +181,8 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		
 		addGridItem(panel, buttonShowPieChart, 4, 5, 1, 1, GridBagConstraints.CENTER);
 		addGridItem(panel, buttonShowBarChart, 5, 5, 1, 1, GridBagConstraints.CENTER);
+		
+		refreshSavedStateLabel();
 				
 		this.add(panel);
 		this.pack();
@@ -233,6 +240,19 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		person.setLastName(textAreaSurname.getText());
 		person.setIncome( Double.valueOf(textIncome.getText()) );
 		person.setIdentifyingNumber( Integer.valueOf(textId.getText()) );
+	}
+	
+	private void refreshSavedStateLabel() {
+		
+		if(person.getFile()==null) {
+			fileSaveStateLabel.setText("Not Saved to File");
+			fileSaveStateLabel.setForeground(Color.red);
+			fileSaveStateLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 15));
+		} else {
+			fileSaveStateLabel.setText("Saved to File");
+			fileSaveStateLabel.setForeground(new Color(0, 153, 75)); //Dark Green
+			fileSaveStateLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 15));
+		}
 	}
 
 	public void hideCard() {

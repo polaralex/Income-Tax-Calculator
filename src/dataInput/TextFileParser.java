@@ -10,12 +10,21 @@ import dataManagement.Company;
 import dataManagement.Receipt;
 import java.util.Locale;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class TextFileParser extends InputFileParser {
 	
 	public TextFileParser(File filename) {
 		tokenizeInput(filename);
-	    parsePersonData();
-	    parseReceiptData();
+	    try {
+			parsePersonData();
+			parseReceiptData();
+		} catch (Exception e) {
+			JFrame frame = new JFrame();
+			JOptionPane.showMessageDialog(frame, "Error: There is probably some problem with the input data. "
+					+ "Please check the requirements for consistency.", "Parsing Engine Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	void parsePersonData() {
