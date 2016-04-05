@@ -29,8 +29,9 @@ import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
 
 import dataExport.BarChart;
+import dataExport.OutputManager;
 import dataExport.PieChart;
-import dataInput.InputOutputManager;
+import dataInput.InputManager;
 
 public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	
@@ -202,7 +203,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 			
 			if ( isNumeric(textIncome.getText()) && isNumeric(textId.getText()) ) {
 				updatePersonData();
-				InputOutputManager.updatePersonFile(person);
+				OutputManager.updatePersonFile(person);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Error: Tax-Payer Id and Income should be number values.");
@@ -220,7 +221,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 			
 			if ( receiptsPanel.isAnyListCellSelected() == true ){
 				receiptsPanel.deleteSelectedCell();
-				InputOutputManager.updatePersonFile(person);
+				OutputManager.updatePersonFile(person);
 			}
 			
 		} else if ( e.getSource().equals(buttonShowPieChart) ) {

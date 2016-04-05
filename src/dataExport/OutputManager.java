@@ -1,4 +1,4 @@
-package dataInput;
+package dataExport;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import dataManagement.PeopleManager;
 import dataManagement.Person;
 import dataManagement.Receipt;
 
-public class InputOutputManager {
+public class OutputManager {
 		
 	// This will check if the File to be saved needs to be in TXT of XML format:
 	public static void savePersonToFile (Person personToSave, File file) {
@@ -61,39 +61,6 @@ public class InputOutputManager {
 	public static void saveLogAsTxtFile (Person personToSave, File file) {
 		
 		OutputFileEncoder logFileTxtEncoder = new LogFileTxtEncoder(file.getAbsolutePath(), personToSave);
-	}
-	
-	public static Person importPersonFromFile(File file) {
-		
-		String filename = file.getAbsolutePath();
-		InputFileParser inputFileParser;
-		
-		if( filename.substring(filename.lastIndexOf(".") + 1).equals("xml") ){
-			inputFileParser = new XmlParser(new File(filename));
-		} else {
-			inputFileParser = new TextFileParser(new File(filename));
-		}
-								
-		try {
-			String firstname = inputFileParser.getFirstname();
-			String lastname = inputFileParser.getLastname();
-			String category = inputFileParser.getCategory();
-			Integer afm = inputFileParser.getAfm();
-			Double income = inputFileParser.getIncome();
-			ArrayList<Receipt> receiptList = inputFileParser.getReceiptsList();
-			
-			Person newPerson = PeopleManager.createNewPerson(category, firstname, lastname, afm, income);
-			newPerson.setFile(file);
-			
-			if (!receiptList.equals(null)){
-				newPerson.addReceiptsList(receiptList);
-			}
-			
-			return newPerson;
-		} catch (Exception e) {
-			// In the event of invalid data input a placeholder Person is returned:
-			return (PeopleManager.createNewPerson("Single", "No Name Found", "", 0, 0d));
-		}
 	}
 	
 	public static String getPersonSuggestedXMLFilename (Person personToSave) {

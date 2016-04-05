@@ -16,7 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import dataInput.InputOutputManager;
+import dataExport.OutputManager;
+import dataInput.InputManager;
 import dataManagement.Company;
 import dataManagement.Person;
 import dataManagement.Receipt;
@@ -93,7 +94,6 @@ public class AddReceiptScreen extends GridBagBasedScreen implements ActionListen
 		this.setVisible(true);
 	}
 		
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -101,11 +101,10 @@ public class AddReceiptScreen extends GridBagBasedScreen implements ActionListen
 			
 			if ( isNumeric(idInput.getText()) && isNumeric(amountInput.getText()) ) {
 				Date date = new Date();
-				// To-do: Company as an Object:
 				Company company = new Company(companyInput.getText(), "no address");
 				receiptsListModel.addElement(new Receipt(Integer.valueOf(idInput.getText()), date, (String)categoryInput.getSelectedItem(), Double.valueOf(amountInput.getText()), company));
 				
-				InputOutputManager.updatePersonFile(person);
+				OutputManager.updatePersonFile(person);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Error: Id and Amount should be number values.");

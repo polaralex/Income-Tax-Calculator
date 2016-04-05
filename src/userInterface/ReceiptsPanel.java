@@ -26,17 +26,6 @@ public class ReceiptsPanel extends JPanel implements ActionListener {
 		this.add(list);
 	}
 	
-	private Color chooseReceiptColor (Receipt receipt) {
-		
-		if(receipt.getCategory()=="Super Market") {
-			return(new Color(121,189,143));
-		} else if (receipt.getCategory()=="Petrol") {
-			return(new Color(255,97,96));
-		} else {
-			return(new Color(255,255,157));
-		}
-	}
-	
 	public ReceiptListModel getModel () {
 		return model;
 	}
@@ -58,6 +47,5 @@ public class ReceiptsPanel extends JPanel implements ActionListener {
 	public void deleteSelectedCell() {
 		
 		model.removeItem(list.getSelectedIndex());
-		
 	}
 }

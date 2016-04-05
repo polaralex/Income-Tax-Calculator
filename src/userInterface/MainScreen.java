@@ -28,9 +28,10 @@ import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import dataExport.OutputManager;
 import dataExport.XmlEncoder;
 import dataInput.InputFileParser;
-import dataInput.InputOutputManager;
+import dataInput.InputManager;
 import dataInput.TextFileParser;
 import dataInput.XmlParser;
 
@@ -216,9 +217,9 @@ public class MainScreen extends GridBagBasedScreen {
 		JFileChooser fileChooser = new JFileChooser();
 		
 		if (saveType.equals("Full")){
-			fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedXMLFilename(personObject)));
+			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedXMLFilename(personObject)));
 		} else if (saveType.equals("Log")) {
-			fileChooser.setSelectedFile(new File(InputOutputManager.getPersonSuggestedTxtLogFilename(personObject)));
+			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedTxtLogFilename(personObject)));
 		}
 		
 		int returnVal = fileChooser.showSaveDialog(frame);
@@ -235,13 +236,13 @@ public class MainScreen extends GridBagBasedScreen {
 	
 	protected void saveFullFile(Person personObject, File selectedFile) {
 			
-			InputOutputManager.savePersonToFile(personObject, selectedFile);
+			OutputManager.savePersonToFile(personObject, selectedFile);
 			JOptionPane.showMessageDialog(frame, "The data file was saved to disk.");
 	}
 	
 	protected void saveLogFile(Person personObject, File selectedFile) {
 
-			InputOutputManager.savePersonToLogFile(personObject, selectedFile);
+			OutputManager.savePersonToLogFile(personObject, selectedFile);
 			JOptionPane.showMessageDialog(frame, "The log file was saved to disk.");
 	}
 	
@@ -254,7 +255,7 @@ public class MainScreen extends GridBagBasedScreen {
 		
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 						
-			Person importedPerson = InputOutputManager.importPersonFromFile(fileChooser.getSelectedFile());
+			Person importedPerson = InputManager.importPersonFromFile(fileChooser.getSelectedFile());
 			model.addElement(importedPerson);		
 		}
 	}

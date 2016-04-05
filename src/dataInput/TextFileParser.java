@@ -117,12 +117,13 @@ public class TextFileParser extends InputFileParser {
 				
 				goToPreviousWord();
 				return (true);
-				
 			}	
 			
 		} else {
+			
 			return (false);
 		}
+		
 		return (false);
 	}
 	
