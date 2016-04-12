@@ -2,6 +2,7 @@ package dataInput;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,41 +37,51 @@ public abstract class InputFileParser {
 	protected void tokenizeInput (File textFile) {
 		
 		BufferedReader in = null;
-		
 		try {
-			// First, we open the file and read all the lines of the file:
-		    in = new BufferedReader(new FileReader(textFile));
-		    
-		    String readLine = "";
-		    
-		    while ( (readLine = in.readLine()) != null ) {
-		    	
-		    	if (readWords == null) {
-		    		readWords = readLine;
-		    	} else {
-		    		readWords = readWords+" "+readLine;
-		    	}
-		    }
-		    		    
-		    // Now we want to split the lines string in words:
-		    if ( readWords != null) {
-		    	String[] splited;
-		        splited = readWords.split("\\s+");
-		        for (String word : splited) {
-		            if (word != null) { 
-		            	parsedWords.add(word);
-		            }
-		        }
-		    }
+			parseInputLines(in, textFile);
+			splitInputLinesToWords();
+		    closeInputFile(in);
 		} catch (IOException e) {
-		    System.out.println("There was a problem: " + e);
 		    e.printStackTrace();
-		} finally {
-		    try {
-		        in.close();
-		    } catch (Exception e) {
-		    }
 		}
+	}
+	
+	private void closeInputFile(BufferedReader in){
+		try {
+	        in.close();
+	    } catch (Exception e) {
+	    }
+	}
+	
+	private void parseInputLines(BufferedReader in, File textFile) throws IOException{
+	    in = new BufferedReader(new FileReader(textFile));
+	    String readLine = "";
+	    
+	    while ( (readLine = in.readLine()) != null ) {
+	    	concatenateInputWordsToBuffer(readLine);
+	    }
+	    
+	    in.close();
+	}
+	
+	private void splitInputLinesToWords(){
+	    if ( readWords != null) {
+	    	String[] splited;
+	        splited = readWords.split("\\s+");
+	        for (String word : splited) {
+	            if (word != null) { 
+	            	parsedWords.add(word);
+	            }
+	        }
+	    }
+	}
+	
+	private void concatenateInputWordsToBuffer(String readLine) {
+    	if (readWords == null) {
+    		readWords = readLine;
+    	} else {
+    		readWords = readWords+" "+readLine;
+    	}
 	}
 	
 	protected void getNextWord() {

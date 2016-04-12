@@ -35,36 +35,45 @@ public abstract class OutputFileEncoder {
 		writeTag("Income", person.getIncome().toString());
 	}
 		
-	protected void receiptsToTagConverter(ArrayList<Receipt> receiptsList) {
+	protected void convertReceiptsToTag(ArrayList<Receipt> receiptsList) {
 		
 		if ((receiptsList != null) && (receiptsList.isEmpty() == false)) {
 			
 			for(Receipt receipt : receiptsList) {
-				
-				writeTag("ReceiptID", receipt.getReceiptId().toString());
-				
-				DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-				writeTag("Date", format.format(receipt.getDateOfIssue()));
-				
-				writeTag("Kind", receipt.getCategory());
-				writeTag("Amount", receipt.getAmount().toString());
-				writeTag("Company", receipt.getCompany().getName());
-				writeTag("Country", " "); // TODO: CHECK THE ADDRESS THING OF THE COMPANY OBJECT
-				writeTag("City", " ");
-				writeTag("Street", receipt.getCompany().getAddress());
-				writeTag("Number", " ");
+				extractReceiptTags(receipt);
 			}
 		}
 	}
 	
+	private void extractReceiptTags(Receipt receipt) {
+		writeTag("ReceiptID", receipt.getReceiptId().toString());
+		DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+		writeTag("Date", format.format(receipt.getDateOfIssue()));
+		writeTag("Kind", receipt.getCategory());
+		writeTag("Amount", receipt.getAmount().toString());
+		writeTag("Company", receipt.getCompany().getName());
+		writeTag("Country", " "); // TODO: CHECK THE ADDRESS THING OF THE COMPANY OBJECT
+		writeTag("City", " ");
+		writeTag("Street", receipt.getCompany().getAddress());
+		writeTag("Number", " ");
+	}
+	
 	protected void personToLogConverter(Person person) {
+		extractBasicPersonTags(person);
+		extractReceiptCategoryTags(person);
+	}
+	
+	private void extractBasicPersonTags(Person person) {
 		writeTag("Name", person.getFirstName()+" "+person.getLastName());
 		writeTag("AFM", person.getIdentifyingNumber().toString());
 		writeTag("Income", person.getIncome().toString());
 		writeTag("Basic Tax", person.calculateTaxBeforeReceipts().toString());
-		Double tempTaxIncread = person.calculateTax() - person.calculateTaxBeforeReceipts();
-		writeTag("Tax Increase", tempTaxIncread.toString());
+		Double tempTaxIncrease = person.calculateTax() - person.calculateTaxBeforeReceipts();
+		writeTag("Tax Increase", tempTaxIncrease.toString());
 		writeTag("Total Tax", person.calculateTax().toString());
+	}
+	
+	private void extractReceiptCategoryTags(Person person) {
 		writeTag("Total Receipts Gathered", person.calculateReceiptAmount().toString());
 		writeTag("Basic", person.calculateReceiptAmount("Basic").toString());
 		writeTag("Entertainment", person.calculateReceiptAmount("Entertainment").toString());
@@ -74,18 +83,21 @@ public abstract class OutputFileEncoder {
 	}
 		
 	protected void saveOutputToFile(File outputFile) {
-		
 		try {
 			fileWriter = new FileWriter(outputFile,false);
 			fileWriter.append(totalOutput);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				fileWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			closeFileWriter(fileWriter);
+		}
+	}
+	
+	private void closeFileWriter(FileWriter filewriter){
+		try {
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

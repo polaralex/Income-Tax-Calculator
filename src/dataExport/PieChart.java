@@ -33,47 +33,31 @@ public class PieChart extends JFrame {
 	private PieDataset createDataset(Person person) {
 
 		ArrayList<Receipt> receipts = person.getReceiptsList();
-
-		Double basic = 0d;
-		Double entertainment = 0d;
-		Double travel = 0d;
-		Double health = 0d;
-		Double other = 0d;
-
+		DefaultPieDataset result = new DefaultPieDataset();
+		
+		setValuesToDataset(receipts, result);
+		
+		return result;
+	}
+	
+	private void setValuesToDataset(ArrayList<Receipt> receipts, DefaultPieDataset result) {
+		
+		result.setValue("Basic: " + getTotalCategoryValue(receipts, "Basic") + " $", getTotalCategoryValue(receipts, "Basic")); 
+		result.setValue("Entertainment: " + getTotalCategoryValue(receipts, "Entertainment") + " $", getTotalCategoryValue(receipts, "Entertainment")); 
+		result.setValue("Travel: " + getTotalCategoryValue(receipts, "Travel") + " $", getTotalCategoryValue(receipts, "Travel")); 
+		result.setValue("Health: " + getTotalCategoryValue(receipts, "Health") + " $", getTotalCategoryValue(receipts, "Health")); 
+		result.setValue("Other: " + getTotalCategoryValue(receipts, "Other") + " $", getTotalCategoryValue(receipts, "Other")); 
+	}
+	
+	private Double getTotalCategoryValue(ArrayList<Receipt> receipts, String selectedCategory) {
+		
+		Double value = 0d;
 		for (Receipt current : receipts) {
-
-			switch (current.getCategory()) {
-
-			case "Basic":
-				basic = basic + current.getAmount();
-				break;
-
-			case "Entertainment":
-				entertainment = entertainment + current.getAmount();
-				break;
-
-			case "Travel":
-				travel = travel + current.getAmount();
-				break;
-
-			case "Health":
-				health = health + current.getAmount();
-				break;
-
-			case "Other":
-				other = other + current.getAmount();
-				break;
+			if(current.getCategory().equals(selectedCategory)) {
+				value += current.getAmount();
 			}
 		}
-
-		DefaultPieDataset result = new DefaultPieDataset();
-		result.setValue("Basic: " + basic.toString() + " $", basic); 
-		result.setValue("Entertainment: " + entertainment.toString() + " $", entertainment); 
-		result.setValue("Travel: " + travel.toString() + " $", travel); 
-		result.setValue("Health: " + health.toString() + " $", health); 
-		result.setValue("Other: " + other.toString() + " $", other); 
-
-		return result;
+		return value;
 	}
 
 	private JFreeChart createChart(PieDataset dataset, String title) {

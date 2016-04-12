@@ -12,9 +12,8 @@ public class XmlEncoder extends OutputFileEncoder {
 	private void doEncodingProcess(){
 		
 		personToTagConverter(person);
-		
 		writeOpeningTag("Receipts");
-		receiptsToTagConverter(person.getReceiptsList());
+		convertReceiptsToTag(person.getReceiptsList());
 		writeClosingTag("Receipts");
 		
 		totalOutput = stringBuilder.toString();

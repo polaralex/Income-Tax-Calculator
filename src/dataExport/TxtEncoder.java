@@ -14,7 +14,7 @@ public class TxtEncoder extends OutputFileEncoder {
 		personToTagConverter(person);
 		
 		writeOpeningTag("Receipts");
-		receiptsToTagConverter(person.getReceiptsList());
+		convertReceiptsToTag(person.getReceiptsList());
 		totalOutput = stringBuilder.toString();
 		saveOutputToFile(xmlOutput);
 	}
