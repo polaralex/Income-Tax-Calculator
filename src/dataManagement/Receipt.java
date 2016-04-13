@@ -1,33 +1,47 @@
 package dataManagement;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Receipt {
-	
+
 	private Integer receiptId;
 	private Date dateOfIssue;
 	private String category;
 	private Double amount;
 	private Company company;
-	
-	public Receipt (Integer receiptId, Date dateOfIssue, String category, Double amount, Company company) {
-		
+
+	private ArrayList<String> categoryTypes = new ArrayList<String>();
+
+	public Receipt(Integer receiptId, Date dateOfIssue, String category, Double amount, Company company) {
+
+		initializeCategoryTypes();
 		this.receiptId = receiptId;
 		this.dateOfIssue = dateOfIssue;
 		this.category = getCorrectCategory(category);
 		this.amount = amount;
 		this.company = company;
 	}
-	
-	private String getCorrectCategory (String category) {
-		
-		if ( !category.equals("Basic") && !category.equals("Entertainment") && !category.equals("Travel") && !category.equals("Health") && !category.equals("Other")) {
-			return "Other";
-		} else {
-			return category;
-		}
+
+	private void initializeCategoryTypes() {
+		categoryTypes.add("Basic");
+		categoryTypes.add("Entertainment");
+		categoryTypes.add("Travel");
+		categoryTypes.add("Health");
+		categoryTypes.add("Other");
 	}
-	
+
+	private String getCorrectCategory(String inputCategory) {
+
+		for (String categoryName : categoryTypes) {
+			if (categoryName.equals(inputCategory)) {
+				return (categoryName);
+			}
+		}
+
+		return ("Other");
+	}
+
 	public Integer getReceiptId() {
 		return receiptId;
 	}
@@ -66,5 +80,9 @@ public class Receipt {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public ArrayList<String> getCategories() {
+		return categoryTypes;
 	}
 }

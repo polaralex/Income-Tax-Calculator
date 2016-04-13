@@ -17,13 +17,18 @@ import dataManagement.Receipt;
 
 public class PieChart extends JFrame {
 
+	private int xPosition = 200;
+	private int yPosition = 200;
+	private int windowWidth = 750;
+	private int windowHeight = 400;
+
 	public PieChart(String applicationTitle, String chartTitle, Person person) {
 
 		super(applicationTitle);
 		PieDataset dataset = createDataset(person);
 		JFreeChart chart = createChart(dataset, chartTitle);
 		ChartPanel chartPanel = new ChartPanel(chart);
-		this.setBounds(200, 200, 750, 400);
+		this.setBounds(xPosition, yPosition, windowWidth, windowHeight);
 		chartPanel.setPreferredSize(new java.awt.Dimension(680, 420));
 		setContentPane(chartPanel);
 		this.pack();
@@ -34,26 +39,38 @@ public class PieChart extends JFrame {
 
 		ArrayList<Receipt> receipts = person.getReceiptsList();
 		DefaultPieDataset result = new DefaultPieDataset();
-		
+
 		setValuesToDataset(receipts, result);
-		
+
 		return result;
 	}
-	
+
 	private void setValuesToDataset(ArrayList<Receipt> receipts, DefaultPieDataset result) {
-		
-		result.setValue("Basic: " + getTotalCategoryValue(receipts, "Basic") + " $", getTotalCategoryValue(receipts, "Basic")); 
-		result.setValue("Entertainment: " + getTotalCategoryValue(receipts, "Entertainment") + " $", getTotalCategoryValue(receipts, "Entertainment")); 
-		result.setValue("Travel: " + getTotalCategoryValue(receipts, "Travel") + " $", getTotalCategoryValue(receipts, "Travel")); 
-		result.setValue("Health: " + getTotalCategoryValue(receipts, "Health") + " $", getTotalCategoryValue(receipts, "Health")); 
-		result.setValue("Other: " + getTotalCategoryValue(receipts, "Other") + " $", getTotalCategoryValue(receipts, "Other")); 
+
+		if (!receipts.isEmpty()) {
+			ArrayList<String> categories = receipts.get(0).getCategories();
+
+			for (String category : categories) {
+				String pieChartString = getCategoryValueString(receipts, category);
+				Double totalCategoryValue = getTotalCategoryValue(receipts, category);
+				result.setValue(pieChartString, totalCategoryValue);
+			}
+		}
 	}
-	
+
+	private String getCategoryValueString(ArrayList<Receipt> receipts, String category) {
+
+		String output = "";
+		output += category + ": " + getTotalCategoryValue(receipts, category) + " $";
+
+		return (output);
+	}
+
 	private Double getTotalCategoryValue(ArrayList<Receipt> receipts, String selectedCategory) {
-		
+
 		Double value = 0d;
 		for (Receipt current : receipts) {
-			if(current.getCategory().equals(selectedCategory)) {
+			if (current.getCategory().equals(selectedCategory)) {
 				value += current.getAmount();
 			}
 		}

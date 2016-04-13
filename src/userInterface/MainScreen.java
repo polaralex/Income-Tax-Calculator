@@ -133,7 +133,7 @@ public class MainScreen extends GridBagBasedScreen {
 					Object category = (String)JOptionPane.showInputDialog(frame, "Choose the type of Tax-Payer:", "Create a new Person", JOptionPane.PLAIN_MESSAGE, null, personTypes, personTypes[0]);					
 					
 					// Finds the index of the selected category:
-					int categoryInteger=0;
+					int categoryInteger = 0;
 					while (personTypes[categoryInteger] != category.toString() && categoryInteger < personTypes.length){
 						categoryInteger++;
 					}

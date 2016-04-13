@@ -19,16 +19,14 @@ public abstract class OutputFileEncoder {
 	protected StringBuilder stringBuilder = new StringBuilder();
 	protected String totalOutput;
 	
-	public OutputFileEncoder (String fileOutputPath, Person inputPerson) {
-		
+	public OutputFileEncoder(String fileOutputPath, Person inputPerson) {
 		xmlOutput = new File(fileOutputPath);
 		person = inputPerson;
 	}
 	
-	protected abstract void writeTag (String tagName, String includedData);
+	protected abstract void writeTag(String tagName, String includedData);
 	
 	protected void personToTagConverter(Person person) {
-		
 		writeTag("Name", person.getFirstName()+" "+person.getLastName());
 		writeTag("AFM", person.getIdentifyingNumber().toString());
 		writeTag("Status", person.getPersonType());
@@ -36,10 +34,8 @@ public abstract class OutputFileEncoder {
 	}
 		
 	protected void convertReceiptsToTag(ArrayList<Receipt> receiptsList) {
-		
 		if ((receiptsList != null) && (receiptsList.isEmpty() == false)) {
-			
-			for(Receipt receipt : receiptsList) {
+			for (Receipt receipt : receiptsList) {
 				extractReceiptTags(receipt);
 			}
 		}
@@ -84,7 +80,7 @@ public abstract class OutputFileEncoder {
 		
 	protected void saveOutputToFile(File outputFile) {
 		try {
-			fileWriter = new FileWriter(outputFile,false);
+			fileWriter = new FileWriter(outputFile, false);
 			fileWriter.append(totalOutput);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -13,72 +13,74 @@ import dataManagement.Person;
 import dataManagement.Receipt;
 
 public class OutputManager {
-		
-	// This will check if the File to be saved needs to be in TXT of XML format:
-	public static void savePersonToFile (Person personToSave, File file) {
-		
-		if ( getFileExtension(file).equals("txt") ) {
+
+	// This will check if the File to be saved needs TXT of XML format:
+	public static void savePersonToFile(Person personToSave, File file) {
+
+		if (getFileExtension(file).equals("txt")) {
 			savePersonToTXTFile(personToSave, file);
-		} else if ( getFileExtension(file).equals("xml") ) {
+		} else if (getFileExtension(file).equals("xml")) {
 			savePersonToXmlFile(personToSave, file);
 		}
 	}
-	
-	public static void savePersonToLogFile (Person personToSave, File file) {
-		
-		if ( getFileExtension(file).equals("txt") ) {
+
+	public static void savePersonToLogFile(Person personToSave, File file) {
+
+		if (getFileExtension(file).equals("txt")) {
 			saveLogAsTxtFile(personToSave, file);
-		} else if ( getFileExtension(file).equals("xml") ) {
+		} else if (getFileExtension(file).equals("xml")) {
 			saveLogAsXmlFile(personToSave, file);
 		}
 	}
-	
-	public static void updatePersonFile (Person personToSave) {
-		
-		// An update will happen only if a file already exists (has been saved previously):
-		if (!(personToSave.getFile() == null)){
+
+	public static void updatePersonFile(Person personToSave) {
+
+		// An update will happen only if a file has already been saved:
+		if (!(personToSave.getFile() == null)) {
 			savePersonToFile(personToSave, personToSave.getFile());
 		}
 	}
-	
-	public static void savePersonToXmlFile (Person personToSave, File file) {
-		
+
+	public static void savePersonToXmlFile(Person personToSave, File file) {
+
 		OutputFileEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), personToSave);
 		personToSave.setFile(file);
 	}
-	
-	public static void savePersonToTXTFile (Person personToSave, File file) {
-		
+
+	public static void savePersonToTXTFile(Person personToSave, File file) {
+
 		OutputFileEncoder txtEncoder = new TxtEncoder(file.getAbsolutePath(), personToSave);
 		personToSave.setFile(file);
 	}
-	
-	public static void saveLogAsXmlFile (Person personToSave, File file) {
-			
+
+	public static void saveLogAsXmlFile(Person personToSave, File file) {
+
 		OutputFileEncoder logFileXmlEncoder = new LogFileXmlEncoder(file.getAbsolutePath(), personToSave);
 	}
 
-	public static void saveLogAsTxtFile (Person personToSave, File file) {
-		
+	public static void saveLogAsTxtFile(Person personToSave, File file) {
+
 		OutputFileEncoder logFileTxtEncoder = new LogFileTxtEncoder(file.getAbsolutePath(), personToSave);
 	}
-	
-	public static String getPersonSuggestedXMLFilename (Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString()+"_INFO.xml");
+
+	public static String getPersonSuggestedXMLFilename(Person personToSave) {
+		return (personToSave.getIdentifyingNumber().toString() + "_INFO.xml");
 	}
-	
-	public static String getPersonSuggestedTxtFilename (Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString()+"_INFO.txt");
+
+	public static String getPersonSuggestedTxtFilename(Person personToSave) {
+		return (personToSave.getIdentifyingNumber().toString() + "_INFO.txt");
 	}
-	
-	public static String getPersonSuggestedTxtLogFilename (Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString()+"_LOG.txt");
+
+	public static String getPersonSuggestedTxtLogFilename(Person personToSave) {
+		return (personToSave.getIdentifyingNumber().toString() + "_LOG.txt");
 	}
-	
+
 	private static String getFileExtension(File file) {
-        String fileName = file.getName();
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-        return fileName.substring(fileName.lastIndexOf(".")+1);
-        else return "";
-    }
+		String fileName = file.getName();
+		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+		} else {
+			return ("");
+		}
+	}
 }
