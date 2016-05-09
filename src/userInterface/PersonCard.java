@@ -245,7 +245,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 	
 	private void refreshSavedStateLabel() {
 		
-		if(person.getFile()==null) {
+		if (person.getFile()==null) {
 			fileSaveStateLabel.setText("Not Saved to File");
 			fileSaveStateLabel.setForeground(Color.red);
 			fileSaveStateLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 15));

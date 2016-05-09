@@ -1,10 +1,10 @@
 package dataManagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import dataManagement.Person;
-import dataManagement.Single;
 
 public class PeopleManager {
 	
@@ -17,35 +17,47 @@ public class PeopleManager {
 	public static Person createNewPerson (int category, String firstName, String lastName, Integer identifyingNumber, Double income){
 	
 		if (category == Person.MARRIED_FILING_JOINTLY) {
-			 return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
+			 return(new Person(firstName, lastName, "Married Filing Jointly", identifyingNumber, income));
 		} else if (category == Person.MARRIED_FILING_SEPERATELY) {
-			return(new MarriedFilingSeperately(firstName, lastName, identifyingNumber, income));
+			return(new Person(firstName, lastName, "Married Filing Seperately", identifyingNumber, income));
 		} else if (category == Person.HEAD_OF_HOUSEHOLD) {
-			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income));
+			return(new Person(firstName, lastName, "Head of Household", identifyingNumber, income));
 		} else if (category == Person.SINGLE) {
-			return(new Single(firstName, lastName, identifyingNumber, income));
+			return(new Person(firstName, lastName, "Single", identifyingNumber, income));
 		}
 		
 		System.out.println("Error: Problem with the Identification of Tax-Payer Category.");
-		return(new Single(" ", " ", 0, 0));
+		return(new Person(" ", " ", "Single", 0, 0));
+	}
+	
+	public Person createNewPerson (int category) {
+		return(createNewPerson(category, " ", " ", 0, 0.0));
 	}
 	
 	public static Person createNewPerson (String categoryBeforeTrim, String firstName, String lastName, Integer identifyingNumber, Double income){
 		
 		String category = categoryBeforeTrim.trim();
 		
-		if (category.equals("Married Filing Jointly")) {
-			return(new MarriedFilingJointly(firstName, lastName, identifyingNumber, income));
-		} else if (category.equals("Married Filing Seperately")) {
-			return(new MarriedFilingSeperately(firstName, lastName, identifyingNumber, income));
-		} else if (category.equals("Head of Household")) {
-			return(new HeadOfHousehold(firstName, lastName, identifyingNumber, income));
-		} else if (category.equals("Single")) {
-			return(new Single(firstName, lastName, identifyingNumber, income));
+		if(isValidCategory(category)){
+			return(new Person(firstName, lastName, category, identifyingNumber, income));
 		}
-				
+			
 		System.out.println("Error: Problem with the Identification of Tax-Payer Category.");
-		return(new Single(" ", " ", 0, 0));
+		return(new Person(" ", " ", "Single", 0, 0));
+	}
+	
+	private static Boolean isValidCategory(String category) {
+		
+		ArrayList<String> categories = new ArrayList<String>();
+		categories.addAll(Arrays.asList("Single", "Head of Household", "Married Filing Jointly", "Married Filing Seperately"));
+		
+		for(String current : categories){
+			if(current.equals(category)){
+				return (true);
+			}
+		}
+		
+		return(false);
 	}
 	
 	public Company companyCreator(String name, String address) {
@@ -63,30 +75,15 @@ public class PeopleManager {
 		return ( new Company(name, address) );
 	}
 	
-	public Person createNewPerson (int category) {
-		
-		if (category == Person.MARRIED_FILING_JOINTLY) {
-			return(new MarriedFilingJointly());
-		} else if (category == Person.MARRIED_FILING_SEPERATELY) {
-			return(new MarriedFilingSeperately());
-		} else if (category == Person.HEAD_OF_HOUSEHOLD) {
-			return(new HeadOfHousehold());
-		} else if (category == Person.SINGLE) {
-			return(new Single());
-		}
-		
-		return null;
-	}
-	
 	public void testCreatePersons() {
 		
-		personList.add(new Single("Alex", "Emexezidis", 1, 1200));
-		personList.add(new Single("Maria", "Arnaoutaki", 2, 1300));
-		personList.add(new MarriedFilingJointly("Larry", "Ioannidis", 3, 1039));
-		personList.add(new MarriedFilingSeperately("Basilis", "Sideropoulos", 4, 3000));
-		personList.add(new HeadOfHousehold("Kostas", "Konstantinou", 5, 295000));
-		personList.add(new Single("Giannis", "Parios", 6, 35000));
-		personList.add(new Single("Maria", "Farantouki", 7, 83000));	
+		personList.add(new Person("Alex", "Emexezidis", "Single", 1, 1200));
+		personList.add(new Person("Maria", "Arnaoutaki", "Single", 2, 1300));
+		personList.add(new Person("Larry", "Ioannidis", "Married Filing Jointly", 3, 1039));
+		personList.add(new Person("Basilis", "Sideropoulos", "Married Filing Seperately", 4, 3000));
+		personList.add(new Person("Kostas", "Konstantinou", "Head of Household", 5, 295000));
+		personList.add(new Person("Giannis", "Parios", "Single", 6, 35000));
+		personList.add(new Person("Maria", "Farantouki", "Single", 7, 83000));	
 		
 		Date date = new Date();
 		personList.get(1).addReceipt(new Receipt(1, date, "Basic", 55d, companyCreator("Basilopoulos","Ioannina")));
