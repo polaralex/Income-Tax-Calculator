@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import dataManagement.Company;
+import dataManagement.PeopleManager;
+import dataManagement.Person;
 import dataManagement.Receipt;
 
 public abstract class InputFileParser {
@@ -41,7 +43,8 @@ public abstract class InputFileParser {
 	protected Integer afmFinal = 00000;
 	protected Double incomeFinal = 00000d;
 	
-	// Data to Export for Receipts:
+	// Data to Export:
+	private Person newPerson;
 	protected ArrayList<Receipt> receiptsList = new ArrayList<Receipt>();
 	
 	public InputFileParser(File filename) {
@@ -50,6 +53,12 @@ public abstract class InputFileParser {
 		try {
 			parsePersonData();
 		    parseReceiptData();
+		    newPerson = PeopleManager.createNewPerson(status, firstname, lastname, afmFinal, incomeFinal);
+		    
+		    if (!receiptsList.equals(null)){
+				newPerson.addReceiptsList(receiptsList);
+			}
+
 		} catch (Exception e) {
 			JFrame frame = new JFrame();
 			JOptionPane.showMessageDialog(frame, "Error: There is probably some problem with the input data. "
@@ -97,10 +106,6 @@ public abstract class InputFileParser {
 		Company companyFinal = new Company(company, street + " " + addressNumber + ", " + city + ", " + country);
 
 		receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
-	}
-	
-	protected void consumeReceipt() {
-		getNextWord();
 	}
 	
 	void parsePersonData() {
@@ -183,27 +188,11 @@ public abstract class InputFileParser {
 		}
 	}
 	
-	public ArrayList<Receipt> getReceiptsList() {
-		return receiptsList;
+	protected void consumeReceipt() {
+		getNextWord();
 	}
 
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public Integer getAfm() {
-		return afmFinal;
-	}
-
-	public Double getIncome() {
-		return incomeFinal;
-	}
-
-	public String getCategory() {
-		return status;
+	public Person getPerson(){
+		return (newPerson);
 	}
 }

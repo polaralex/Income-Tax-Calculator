@@ -1,11 +1,8 @@
 package dataInput;
 
 import java.io.File;
-import java.util.ArrayList;
-
 import dataManagement.PeopleManager;
 import dataManagement.Person;
-import dataManagement.Receipt;
 
 public class InputManager {
 	
@@ -21,31 +18,14 @@ public class InputManager {
 		}
 								
 		try {
-			String firstname = inputFileParser.getFirstname();
-			String lastname = inputFileParser.getLastname();
-			String category = inputFileParser.getCategory();
-			Integer afm = inputFileParser.getAfm();
-			Double income = inputFileParser.getIncome();
-			ArrayList<Receipt> receiptList = inputFileParser.getReceiptsList();
 			
-			Person newPerson = PeopleManager.createNewPerson(category, firstname, lastname, afm, income);
+			Person newPerson = inputFileParser.getPerson();
 			newPerson.setFile(file);
+			return (newPerson);
 			
-			if (!receiptList.equals(null)){
-				newPerson.addReceiptsList(receiptList);
-			}
-			
-			return newPerson;
 		} catch (Exception e) {
 			// In the event of invalid data input a placeholder Person is returned:
 			return (PeopleManager.createNewPerson("Single", "No Name Found", "", 0, 0d));
 		}
 	}
-	
-	private static String getFileExtension(File file) {
-        String fileName = file.getName();
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-        return fileName.substring(fileName.lastIndexOf(".")+1);
-        else return "";
-    }
 }
