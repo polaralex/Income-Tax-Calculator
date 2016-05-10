@@ -9,6 +9,7 @@ public class XmlEncoder extends OutputFileEncoder {
 	}
 	
 	protected void filetypeSpecificEncodingProcess(){
+		personToTagConverter(person);
 		writeOpeningTag("Receipts");
 		convertReceiptsToTag(person.getReceiptsList());
 		writeClosingTag("Receipts");

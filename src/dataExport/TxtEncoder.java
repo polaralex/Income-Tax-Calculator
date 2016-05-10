@@ -9,6 +9,7 @@ public class TxtEncoder extends OutputFileEncoder {
 	}
 	
 	protected void filetypeSpecificEncodingProcess(){
+		personToTagConverter(person);
 		writeOpeningTag("Receipts");
 		convertReceiptsToTag(person.getReceiptsList());
 	}

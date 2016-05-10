@@ -7,14 +7,10 @@ public class LogFileTxtEncoder extends OutputFileEncoder {
 	public LogFileTxtEncoder (String fileOutputPath, Person inputPerson) {	
 		
 		super(fileOutputPath, inputPerson);
-		doEncodingProcess();
 	}
 	
-	private void doEncodingProcess(){
-		
+	protected void filetypeSpecificEncodingProcess(){
 		personToLogConverter(person);
-		totalOutput = stringBuilder.toString();
-		saveOutputToFile(xmlOutput);
 	}
 	
 	protected void writeTag (String tagName, String includedData) {

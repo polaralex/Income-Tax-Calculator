@@ -24,7 +24,7 @@ public abstract class OutputFileEncoder {
 	public OutputFileEncoder(String fileOutputPath, Person inputPerson) {
 		xmlOutput = new File(fileOutputPath);
 		person = inputPerson;
-		personToTagConverter(person);
+		
 		filetypeSpecificEncodingProcess();
 		totalOutput = stringBuilder.toString();
 		saveOutputToFile(xmlOutput);
