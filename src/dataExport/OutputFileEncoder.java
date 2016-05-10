@@ -3,85 +3,50 @@ package dataExport;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-
 import dataManagement.Person;
-import dataManagement.Receipt;
 
 public abstract class OutputFileEncoder {
 
-	protected File xmlOutput;
+	protected File output;
 	protected FileWriter fileWriter;
 	protected Person person;
 	protected StringBuilder stringBuilder = new StringBuilder();
 	protected String totalOutput;
 	
-	abstract protected void filetypeSpecificEncodingProcess();
+	TagList tagListPersonData;
+	TagList tagListReceipts;
 	
-	public OutputFileEncoder(String fileOutputPath, Person inputPerson) {
-		xmlOutput = new File(fileOutputPath);
-		person = inputPerson;
-		
-		filetypeSpecificEncodingProcess();
-		totalOutput = stringBuilder.toString();
-		saveOutputToFile(xmlOutput);
-	}
-	
+	abstract protected void filetypeSpecificEncodingProcess(String tagName);
 	protected abstract void writeTag(String tagName, String includedData);
 	
-	protected void personToTagConverter(Person person) {
-		writeTag("Name", person.getFirstName()+" "+person.getLastName());
-		writeTag("AFM", person.getIdentifyingNumber().toString());
-		writeTag("Status", person.getPersonType());
-		writeTag("Income", person.getIncome().toString());
-	}
+	public OutputFileEncoder(String fileOutputPath, TagList tagListPersonData, TagList tagListReceipts) {
 		
-	protected void convertReceiptsToTag(ArrayList<Receipt> receiptsList) {
-		if ((receiptsList != null) && (receiptsList.isEmpty() == false)) {
-			for (Receipt receipt : receiptsList) {
-				extractReceiptTags(receipt);
-			}
+		this.tagListPersonData = tagListPersonData;
+		this.tagListReceipts = tagListReceipts;
+		
+		output = new File(fileOutputPath);
+		String tagName = "Receipts";
+		filetypeSpecificEncodingProcess(tagName);
+		totalOutput = stringBuilder.toString();
+		saveOutputToFile(output);
+	}
+	
+	protected void writePersonTags() {
+		writeTagList(tagListPersonData);
+	}
+	
+	protected void writeReceiptTags() {
+		writeTagList(tagListReceipts);
+	}
+	
+	protected void writeTagList(TagList tagList) {
+		
+		Integer position = 0;
+		
+		while ( position < tagList.getSize() ){
+			writeTag(tagList.get(1, position), tagList.get(2, position));
+			position++;
 		}
-	}
-	
-	private void extractReceiptTags(Receipt receipt) {
-		writeTag("ReceiptID", receipt.getReceiptId().toString());
-		DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-		writeTag("Date", format.format(receipt.getDateOfIssue()));
-		writeTag("Kind", receipt.getCategory());
-		writeTag("Amount", receipt.getAmount().toString());
-		writeTag("Company", receipt.getCompany().getName());
-		writeTag("Country", " "); // TODO: CHECK THE ADDRESS THING OF THE COMPANY OBJECT
-		writeTag("City", " ");
-		writeTag("Street", receipt.getCompany().getAddress());
-		writeTag("Number", " ");
-	}
-	
-	protected void personToLogConverter(Person person) {
-		extractBasicPersonTags(person);
-		extractReceiptCategoryTags(person);
-	}
-	
-	private void extractBasicPersonTags(Person person) {
-		writeTag("Name", person.getFirstName()+" "+person.getLastName());
-		writeTag("AFM", person.getIdentifyingNumber().toString());
-		writeTag("Income", person.getIncome().toString());
-		writeTag("Basic Tax", person.calculateTaxBeforeReceipts().toString());
-		Double tempTaxIncrease = person.calculateFinalTax() - person.calculateTaxBeforeReceipts();
-		writeTag("Tax Increase", tempTaxIncrease.toString());
-		writeTag("Total Tax", person.calculateFinalTax().toString());
-	}
-	
-	private void extractReceiptCategoryTags(Person person) {
-		writeTag("Total Receipts Gathered", person.calculateReceiptAmount().toString());
-		writeTag("Basic", person.calculateReceiptAmount("Basic").toString());
-		writeTag("Entertainment", person.calculateReceiptAmount("Entertainment").toString());
-		writeTag("Travel", person.calculateReceiptAmount("Travel").toString());
-		writeTag("Health", person.calculateReceiptAmount("Health").toString());
-		writeTag("Other", person.calculateReceiptAmount("Other").toString());
 	}
 		
 	protected void saveOutputToFile(File outputFile) {

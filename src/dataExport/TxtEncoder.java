@@ -1,17 +1,15 @@
 package dataExport;
 
-import dataManagement.Person;
-
 public class TxtEncoder extends OutputFileEncoder {
 
-	public TxtEncoder(String fileOutputPath, Person inputPerson) {
-		super(fileOutputPath, inputPerson);
+	public TxtEncoder(String fileOutputPath, TagList tagListPersonData, TagList tagListReceipts) {
+		super(fileOutputPath, tagListPersonData, tagListReceipts);
 	}
 	
-	protected void filetypeSpecificEncodingProcess(){
-		personToTagConverter(person);
-		writeOpeningTag("Receipts");
-		convertReceiptsToTag(person.getReceiptsList());
+	protected void filetypeSpecificEncodingProcess(String tagName){
+		writePersonTags();
+		writeOpeningTag(tagName);
+		writeReceiptTags();
 	}
 
 	protected void writeTag(String tagName, String includedData) {

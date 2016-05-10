@@ -34,6 +34,8 @@ import javax.swing.JFileChooser;
 public class MainScreen extends GridBagBasedScreen {
 
 	PeopleManager peopleManager;
+	OutputManager outputManager;
+	
 	private JFrame frame;
 	private JLabel mainLabelText;
 	private JScrollPane scrollPane;
@@ -69,6 +71,8 @@ public class MainScreen extends GridBagBasedScreen {
 	}
 
 	private void initialize() {
+		
+		outputManager = new OutputManager();
 		
 		frame = new JFrame("Tax-Income Calculator");
 		frame.setBounds(100, 100, 600, 400);
@@ -210,9 +214,9 @@ public class MainScreen extends GridBagBasedScreen {
 		JFileChooser fileChooser = new JFileChooser();
 		
 		if (saveType.equals("Full")){
-			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedFilename(personObject, "xml")));
+			fileChooser.setSelectedFile(new File(outputManager.getPersonSuggestedFilename(personObject, "xml")));
 		} else if (saveType.equals("Log")) {
-			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedFilename(personObject, "log")));
+			fileChooser.setSelectedFile(new File(outputManager.getPersonSuggestedFilename(personObject, "log")));
 		}
 		
 		int returnVal = fileChooser.showSaveDialog(frame);
@@ -229,13 +233,13 @@ public class MainScreen extends GridBagBasedScreen {
 	
 	protected void saveFullFile(Person personObject, File selectedFile) {
 			
-			OutputManager.savePersonToFile(personObject, selectedFile);
+			outputManager.savePersonToFile(personObject, selectedFile);
 			JOptionPane.showMessageDialog(frame, "The data file was saved to disk.");
 	}
 	
 	protected void saveLogFile(Person personObject, File selectedFile) {
 
-			OutputManager.savePersonToLogFile(personObject, selectedFile);
+			outputManager.savePersonToLogFile(personObject, selectedFile);
 			JOptionPane.showMessageDialog(frame, "The log file was saved to disk.");
 	}
 	

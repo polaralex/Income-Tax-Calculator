@@ -1,43 +1,129 @@
 package dataExport;
 
 import java.io.File;
-import dataExport.LogFileTxtEncoder;
-import dataExport.LogFileXmlEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
+
 import dataExport.OutputFileEncoder;
 import dataExport.TxtEncoder;
 import dataExport.XmlEncoder;
 import dataManagement.Person;
+import dataManagement.Receipt;
 
 public class OutputManager {
+	
+	Person person;
+	TagList tagListPersonData;
+	TagList tagListReceipts;
+	
+	public OutputManager() {
+	}
+	
+	private void doPersonFormatExporting(Person person) {
+		
+		extractPersonTags(person);
+		convertReceiptsToTag(person.getReceiptsList());
+	}
+	
+	private void extractPersonTags(Person person) {
+		
+		tagListPersonData = new TagList();
+		
+		tagListPersonData.add("Name", person.getFirstName()+" "+person.getLastName());
+		tagListPersonData.add("AFM", person.getIdentifyingNumber().toString());
+		tagListPersonData.add("Status", person.getPersonType());
+		tagListPersonData.add("Income", person.getIncome().toString());
+	}
+	
+	protected void convertReceiptsToTag(ArrayList<Receipt> receiptsList) {
+		
+		tagListReceipts = new TagList();
+		
+		if ((receiptsList != null) && (receiptsList.isEmpty() == false)) {
+			for (Receipt receipt : receiptsList) {
+				extractReceiptTags(receipt);
+			}
+		}
+	}
+	
+	private void extractReceiptTags(Receipt receipt) {
+		tagListReceipts.add("ReceiptID", receipt.getReceiptId().toString());
+		DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
+		tagListReceipts.add("Date", format.format(receipt.getDateOfIssue()));
+		tagListReceipts.add("Kind", receipt.getCategory());
+		tagListReceipts.add("Amount", receipt.getAmount().toString());
+		tagListReceipts.add("Company", receipt.getCompany().getName());
+		tagListReceipts.add("Country", " ");
+		tagListReceipts.add("City", " ");
+		tagListReceipts.add("Street", receipt.getCompany().getAddress());
+		tagListReceipts.add("Number", " ");
+	}
+	
+	private void doLogFormatExporting(Person person) {
+				
+		extractBasicPersonTags(person);
+		extractReceiptCategoryTags(person);
+	}
+	
+	private void extractBasicPersonTags(Person person){
+		
+		tagListPersonData = new TagList();
+		
+		tagListPersonData.add("Name", person.getFirstName()+" "+person.getLastName());
+		tagListPersonData.add("AFM", person.getIdentifyingNumber().toString());
+		tagListPersonData.add("Income", person.getIncome().toString());
+		tagListPersonData.add("Basic Tax", person.calculateTaxBeforeReceipts().toString());
+		Double tempTaxIncrease = person.calculateFinalTax() - person.calculateTaxBeforeReceipts();
+		tagListPersonData.add("Tax Increase", tempTaxIncrease.toString());
+		tagListPersonData.add("Total Tax", person.calculateFinalTax().toString());
+	}
+	
+	private void extractReceiptCategoryTags(Person person) {
+		
+		tagListReceipts = new TagList();
+		
+		tagListReceipts.add("Total Receipts Gathered", person.calculateReceiptAmount().toString());
+		tagListReceipts.add("Basic", person.calculateReceiptAmount("Basic").toString());
+		tagListReceipts.add("Entertainment", person.calculateReceiptAmount("Entertainment").toString());
+		tagListReceipts.add("Travel", person.calculateReceiptAmount("Travel").toString());
+		tagListReceipts.add("Health", person.calculateReceiptAmount("Health").toString());
+		tagListReceipts.add("Other", person.calculateReceiptAmount("Other").toString());
+	}
 
 	// This will check if the File to be saved needs TXT of XML format:
-	public static void savePersonToFile(Person personToSave, File file) {
+	public void savePersonToFile(Person personToSave, File file) {
+		
+		doPersonFormatExporting(personToSave);
 		
 		if (getFileExtension(file).equals("txt")) {
 			
-			OutputFileEncoder txtEncoder = new TxtEncoder(file.getAbsolutePath(), personToSave);
+			OutputFileEncoder txtEncoder = new TxtEncoder(file.getAbsolutePath(), tagListPersonData, tagListReceipts);
 			personToSave.setFile(file);
 			
 		} else if (getFileExtension(file).equals("xml")) {
 			
-			OutputFileEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), personToSave);
+			OutputFileEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), tagListPersonData, tagListReceipts);
 			personToSave.setFile(file);
 		}
 	}
 
-	public static void savePersonToLogFile(Person personToSave, File file) {
+	public void savePersonToLogFile(Person personToSave, File file) {
+		
+		doLogFormatExporting(personToSave);
 
 		if (getFileExtension(file).equals("txt")) {
 			
-			OutputFileEncoder logFileTxtEncoder = new LogFileTxtEncoder(file.getAbsolutePath(), personToSave);
+			OutputFileEncoder txtEncoder = new TxtEncoder(file.getAbsolutePath(), tagListPersonData, tagListReceipts);
 		
 		} else if (getFileExtension(file).equals("xml")) {
 			
-			OutputFileEncoder logFileXmlEncoder = new LogFileXmlEncoder(file.getAbsolutePath(), personToSave);
+			OutputFileEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), tagListPersonData, tagListReceipts);
 		}
 	}
 
-	public static void updatePersonFile(Person personToSave) {
+	public void updatePersonFile(Person personToSave) {
 
 		// An update will happen only if a file has already been saved:
 		if (!(personToSave.getFile() == null)) {
@@ -45,7 +131,7 @@ public class OutputManager {
 		}
 	}
 	
-	public static String getPersonSuggestedFilename(Person personToSave, String type) {
+	public String getPersonSuggestedFilename(Person personToSave, String type) {
 		
 		if (type.equals("xml")){
 			return (personToSave.getIdentifyingNumber().toString() + "_INFO.xml");
@@ -56,7 +142,7 @@ public class OutputManager {
 		}
 	}
 
-	private static String getFileExtension(File file) {
+	private String getFileExtension(File file) {
 		String fileName = file.getName();
 		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
 			return fileName.substring(fileName.lastIndexOf(".") + 1);

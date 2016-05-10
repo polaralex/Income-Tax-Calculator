@@ -1,18 +1,16 @@
 package dataExport;
 
-import dataManagement.Person;
-
 public class XmlEncoder extends OutputFileEncoder {
 
-	public XmlEncoder(String fileOutputPath, Person inputPerson) {
-		super(fileOutputPath, inputPerson);
+	public XmlEncoder(String fileOutputPath, TagList tagListPersonData, TagList tagListReceipts) {
+		super(fileOutputPath, tagListPersonData, tagListReceipts);
 	}
 	
-	protected void filetypeSpecificEncodingProcess(){
-		personToTagConverter(person);
-		writeOpeningTag("Receipts");
-		convertReceiptsToTag(person.getReceiptsList());
-		writeClosingTag("Receipts");
+	protected void filetypeSpecificEncodingProcess(String tagName){
+		writePersonTags();
+		writeOpeningTag(tagName);
+		writeReceiptTags();
+		writeClosingTag(tagName);
 	}
 
 	protected void writeTag(String tagName, String includedData) {
