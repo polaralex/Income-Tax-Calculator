@@ -64,7 +64,6 @@ public class Person {
 		} else {
 			return(calculateTaxMarriedFilingSeperately());
 		}
-		
 	}
 
 	public Double calculateTaxSingle() {
