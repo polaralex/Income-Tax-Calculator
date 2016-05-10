@@ -25,12 +25,12 @@ public class TextFileParser extends InputFileParser {
 		
 		while ( isNextWordReceiptId() ) {
 						
-			receiptId = checkInsideTag("ID").trim();
+			receiptId = checkForTagData("ID").trim();
 			parseReceiptDataCommonCode();
 		}
 	}
 	
-	protected String checkInsideTag(String tagElement) {
+	protected String checkForTagData(String tagElement) {
 		
 		getNextWord();
 

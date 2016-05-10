@@ -25,15 +25,14 @@ public class XmlParser extends InputFileParser {
 
 		while (isNextWordReceiptId()) {
 			
-			receiptId = checkInsideTag("ReceiptID").trim();
+			receiptId = checkForTagData("ReceiptID").trim();
 			parseReceiptDataCommonCode();
 		}
 	}
 
-	protected String checkInsideTag(String tagElement) {
+	protected String checkForTagData(String tagElement) {
 
 		getNextWord();
-
 		String currentWord = "";
 
 		if (word.equals("<" + tagElement + ">")) {
@@ -44,16 +43,18 @@ public class XmlParser extends InputFileParser {
 				currentWord = currentWord + " " + word;
 				getNextWord();
 			}
-
+			
 			return currentWord;
-
+			
 		} else {
 			return null;
 		}
 	}
 
 	private Boolean isNextWordReceiptId() {
+		
 		getNextWord();
+		
 		if (word.equals("<ReceiptID>")) {
 			parsedWordsIterator = parsedWordsIterator - 2;
 			getNextWord();

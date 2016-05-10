@@ -77,20 +77,20 @@ public abstract class InputFileParser {
 	    in.close();
 	}
 	
-	protected abstract String checkInsideTag(String tagElement);
+	protected abstract String checkForTagData(String tagElement);
 	
 	abstract void parseReceiptData();
 	
 	protected void parseReceiptDataCommonCode() {
 		
-		String date = checkInsideTag("Date").trim();
-		String kind = checkInsideTag("Kind").trim();
-		String amount = checkInsideTag("Amount").trim();
-		String company = checkInsideTag("Company").trim();
-		String country = checkInsideTag("Country").trim();
-		String city = checkInsideTag("City").trim();
-		String street = checkInsideTag("Street").trim();
-		String addressNumber = checkInsideTag("Number").trim();
+		String date = checkForTagData("Date").trim();
+		String kind = checkForTagData("Kind").trim();
+		String amount = checkForTagData("Amount").trim();
+		String company = checkForTagData("Company").trim();
+		String country = checkForTagData("Country").trim();
+		String city = checkForTagData("City").trim();
+		String street = checkForTagData("Street").trim();
+		String addressNumber = checkForTagData("Number").trim();
 
 		// Encode to types compatible with the Receipt Object:
 		Integer receiptIdFinal = Integer.parseInt(receiptId);
@@ -110,10 +110,10 @@ public abstract class InputFileParser {
 	
 	void parsePersonData() {
 
-		name = checkInsideTag("Name").trim();
-		afm = checkInsideTag("AFM").trim();
-		status = checkInsideTag("Status").trim();
-		income = checkInsideTag("Income").trim();
+		name = checkForTagData("Name").trim();
+		afm = checkForTagData("AFM").trim();
+		status = checkForTagData("Status").trim();
+		income = checkForTagData("Income").trim();
 
 		// Preparing name for processing:
 		String[] splittedName = name.split("\\s+");

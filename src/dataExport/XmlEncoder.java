@@ -6,18 +6,12 @@ public class XmlEncoder extends OutputFileEncoder {
 
 	public XmlEncoder(String fileOutputPath, Person inputPerson) {
 		super(fileOutputPath, inputPerson);
-		doEncodingProcess();
 	}
-
-	private void doEncodingProcess() {
-
-		personToTagConverter(person);
+	
+	protected void filetypeSpecificEncodingProcess(){
 		writeOpeningTag("Receipts");
 		convertReceiptsToTag(person.getReceiptsList());
 		writeClosingTag("Receipts");
-
-		totalOutput = stringBuilder.toString();
-		saveOutputToFile(xmlOutput);
 	}
 
 	protected void writeTag(String tagName, String includedData) {
