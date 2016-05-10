@@ -1,35 +1,39 @@
 package dataExport;
 
 import java.io.File;
-import java.util.ArrayList;
-
 import dataExport.LogFileTxtEncoder;
 import dataExport.LogFileXmlEncoder;
 import dataExport.OutputFileEncoder;
 import dataExport.TxtEncoder;
 import dataExport.XmlEncoder;
-import dataManagement.PeopleManager;
 import dataManagement.Person;
-import dataManagement.Receipt;
 
 public class OutputManager {
 
 	// This will check if the File to be saved needs TXT of XML format:
 	public static void savePersonToFile(Person personToSave, File file) {
-
+		
 		if (getFileExtension(file).equals("txt")) {
-			savePersonToTXTFile(personToSave, file);
+			
+			OutputFileEncoder txtEncoder = new TxtEncoder(file.getAbsolutePath(), personToSave);
+			personToSave.setFile(file);
+			
 		} else if (getFileExtension(file).equals("xml")) {
-			savePersonToXmlFile(personToSave, file);
+			
+			OutputFileEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), personToSave);
+			personToSave.setFile(file);
 		}
 	}
 
 	public static void savePersonToLogFile(Person personToSave, File file) {
 
 		if (getFileExtension(file).equals("txt")) {
-			saveLogAsTxtFile(personToSave, file);
+			
+			OutputFileEncoder logFileTxtEncoder = new LogFileTxtEncoder(file.getAbsolutePath(), personToSave);
+		
 		} else if (getFileExtension(file).equals("xml")) {
-			saveLogAsXmlFile(personToSave, file);
+			
+			OutputFileEncoder logFileXmlEncoder = new LogFileXmlEncoder(file.getAbsolutePath(), personToSave);
 		}
 	}
 
@@ -40,39 +44,16 @@ public class OutputManager {
 			savePersonToFile(personToSave, personToSave.getFile());
 		}
 	}
-
-	public static void savePersonToXmlFile(Person personToSave, File file) {
-
-		OutputFileEncoder xmlEncoder = new XmlEncoder(file.getAbsolutePath(), personToSave);
-		personToSave.setFile(file);
-	}
-
-	public static void savePersonToTXTFile(Person personToSave, File file) {
-
-		OutputFileEncoder txtEncoder = new TxtEncoder(file.getAbsolutePath(), personToSave);
-		personToSave.setFile(file);
-	}
-
-	public static void saveLogAsXmlFile(Person personToSave, File file) {
-
-		OutputFileEncoder logFileXmlEncoder = new LogFileXmlEncoder(file.getAbsolutePath(), personToSave);
-	}
-
-	public static void saveLogAsTxtFile(Person personToSave, File file) {
-
-		OutputFileEncoder logFileTxtEncoder = new LogFileTxtEncoder(file.getAbsolutePath(), personToSave);
-	}
-
-	public static String getPersonSuggestedXMLFilename(Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString() + "_INFO.xml");
-	}
-
-	public static String getPersonSuggestedTxtFilename(Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString() + "_INFO.txt");
-	}
-
-	public static String getPersonSuggestedTxtLogFilename(Person personToSave) {
-		return (personToSave.getIdentifyingNumber().toString() + "_LOG.txt");
+	
+	public static String getPersonSuggestedFilename(Person personToSave, String type) {
+		
+		if (type.equals("xml")){
+			return (personToSave.getIdentifyingNumber().toString() + "_INFO.xml");
+		} else if (type.equals("txt")){
+			return (personToSave.getIdentifyingNumber().toString() + "_INFO.txt");
+		} else {
+			return (personToSave.getIdentifyingNumber().toString() + "_LOG.txt");
+		}
 	}
 
 	private static String getFileExtension(File file) {

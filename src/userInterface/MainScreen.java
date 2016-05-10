@@ -6,8 +6,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import dataManagement.PeopleManager;
 import dataManagement.Person;
-import dataManagement.Receipt;
-
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
@@ -23,16 +21,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.File;
-import java.util.ArrayList;
-
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import dataExport.OutputManager;
-import dataExport.XmlEncoder;
-import dataInput.InputFileParser;
 import dataInput.InputManager;
-import dataInput.TextFileParser;
 import dataInput.XmlParser;
 
 import javax.swing.JButton;
@@ -217,9 +210,9 @@ public class MainScreen extends GridBagBasedScreen {
 		JFileChooser fileChooser = new JFileChooser();
 		
 		if (saveType.equals("Full")){
-			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedXMLFilename(personObject)));
+			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedFilename(personObject, "xml")));
 		} else if (saveType.equals("Log")) {
-			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedTxtLogFilename(personObject)));
+			fileChooser.setSelectedFile(new File(OutputManager.getPersonSuggestedFilename(personObject, "log")));
 		}
 		
 		int returnVal = fileChooser.showSaveDialog(frame);

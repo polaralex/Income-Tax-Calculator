@@ -1,17 +1,6 @@
 package dataInput;
 
 import java.io.File;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import dataManagement.Company;
-import dataManagement.Receipt;
-import java.util.Locale;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 public class TextFileParser extends InputFileParser {
 	
