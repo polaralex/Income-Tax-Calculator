@@ -27,11 +27,11 @@ public class PeopleManager {
 		}
 		
 		System.out.println("Error: Problem with the Identification of Tax-Payer Category.");
-		return(new Person(" ", " ", "Single", 0, 0));
+		return(new Person("", "", "Single", 0, 0));
 	}
 	
 	public Person createNewPerson (int category) {
-		return(createNewPerson(category, " ", " ", 0, 0.0));
+		return(createNewPerson(category, "", "", 0, 0.0));
 	}
 	
 	public static Person createNewPerson (String categoryBeforeTrim, String firstName, String lastName, Integer identifyingNumber, Double income){

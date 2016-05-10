@@ -28,8 +28,8 @@ public class BarChart extends JFrame {
 
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		result.setValue(person.calculateTaxBeforeReceipts(), "Basic Tax", "Tax Calculation");
-		result.setValue( (person.calculateTax() - person.calculateTaxBeforeReceipts()), "Tax Increase", "Tax Calculation");
-		result.setValue(person.calculateTax(), "Total Tax", "Tax Calculation");
+		result.setValue( (person.calculateFinalTax() - person.calculateTaxBeforeReceipts()), "Tax Increase", "Tax Calculation");
+		result.setValue(person.calculateFinalTax(), "Total Tax", "Tax Calculation");
 		return result;
 	}
 	

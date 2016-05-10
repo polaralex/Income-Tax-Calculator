@@ -64,9 +64,9 @@ public abstract class OutputFileEncoder {
 		writeTag("AFM", person.getIdentifyingNumber().toString());
 		writeTag("Income", person.getIncome().toString());
 		writeTag("Basic Tax", person.calculateTaxBeforeReceipts().toString());
-		Double tempTaxIncrease = person.calculateTax() - person.calculateTaxBeforeReceipts();
+		Double tempTaxIncrease = person.calculateFinalTax() - person.calculateTaxBeforeReceipts();
 		writeTag("Tax Increase", tempTaxIncrease.toString());
-		writeTag("Total Tax", person.calculateTax().toString());
+		writeTag("Total Tax", person.calculateFinalTax().toString());
 	}
 	
 	private void extractReceiptCategoryTags(Person person) {

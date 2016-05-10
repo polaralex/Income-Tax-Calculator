@@ -25,7 +25,13 @@ public class Person {
 				
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.identifyingNumber = identifyingNumber;
+		
+		if (identifyingNumber == 0) {
+			this.identifyingNumber = getRandomId();
+		} else {
+			this.identifyingNumber = identifyingNumber;
+		}
+		
 		this.personType = personType;
 
 		if (income.getClass() != Double.class) {
@@ -38,10 +44,14 @@ public class Person {
 	public Person() {
 		this.firstName = "";
 		this.lastName = "";
-		Double idNumberDouble = (Math.random() * (999999999 - 100000000));
-		this.identifyingNumber = idNumberDouble.intValue();
+		this.identifyingNumber = getRandomId();
 		this.income = 0d;
 		this.personType = "Single";
+	}
+	
+	private Integer getRandomId(){
+		Double idNumberDouble = (Math.random() * (999999999 - 100000000));
+		return idNumberDouble.intValue();
 	}
 	
 	public Double calculateTaxBeforeReceipts(){
@@ -118,7 +128,7 @@ public class Person {
 		}
 	}
 	
-	public Double calculateTax() {
+	public Double calculateFinalTax() {
 
 		Double receiptAmount = calculateReceiptAmount();
 		Double taxBeforeReceipts = calculateTaxBeforeReceipts();
