@@ -16,69 +16,21 @@ import javax.swing.JOptionPane;
 public class XmlParser extends InputFileParser {
 
 	public XmlParser(File filename) {
-		
-		tokenizeInput(filename);
-		try {
-			parsePersonData();
-		    parseReceiptData();
-		} catch (Exception e) {
-			JFrame frame = new JFrame();
-			JOptionPane.showMessageDialog(frame, "Error: There is probably some problem with the input data. "
-					+ "Please check the requirements for consistency.", "Parsing Engine Error", JOptionPane.ERROR_MESSAGE);
-		}
+		super(filename);
 	}
-
-	void parsePersonData() {
-
-		name = checkInsideTag("Name").trim();
-		afm = checkInsideTag("AFM").trim();
-		status = checkInsideTag("Status").trim();
-		income = checkInsideTag("Income").trim();
-
-		// Preparing name for processing:
-		String[] splittedName = name.split("\\s+");
-
-		// Encoding to Person Object compatible types:
-		firstname = splittedName[0];
-		lastname = splittedName[1];
-		afmFinal = Integer.parseInt(afm);
-		incomeFinal = Double.parseDouble(income);
-	}
-
-	void parseReceiptData() {
+	
+	protected void parseReceiptData() {
 
 		consumeReceipt();
 
 		while (isNextWordReceiptId()) {
-
-			String receiptId = checkInsideTag("ReceiptID").trim();
-			String date = checkInsideTag("Date").trim();
-			String kind = checkInsideTag("Kind").trim();
-			String amount = checkInsideTag("Amount").trim();
-			String company = checkInsideTag("Company").trim();
-			String country = checkInsideTag("Country").trim();
-			String city = checkInsideTag("City").trim();
-			String street = checkInsideTag("Street").trim();
-			String addressNumber = checkInsideTag("Number").trim();
-
-			// Encode to types compatible with the Receipt Object:
-			Integer receiptIdFinal = Integer.parseInt(receiptId);
-			Date dateFinal = new Date();
-			DateFormat format = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-			try {
-				dateFinal = format.parse(date);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			String categoryFinal = kind;
-			Double amountFinal = Double.valueOf(amount);
-			Company companyFinal = new Company(company, street + " " + addressNumber + ", " + city + ", " + country);
-
-			receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
+			
+			receiptId = checkInsideTag("ReceiptID").trim();
+			parseReceiptDataCommonCode();
 		}
 	}
 
-	private String checkInsideTag(String tagElement) {
+	protected String checkInsideTag(String tagElement) {
 
 		getNextWord();
 
@@ -111,7 +63,4 @@ public class XmlParser extends InputFileParser {
 		}
 	}
 
-	private void consumeReceipt() {
-		getNextWord();
-	}
 }

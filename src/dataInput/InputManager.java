@@ -3,11 +3,6 @@ package dataInput;
 import java.io.File;
 import java.util.ArrayList;
 
-import dataExport.LogFileTxtEncoder;
-import dataExport.LogFileXmlEncoder;
-import dataExport.OutputFileEncoder;
-import dataExport.TxtEncoder;
-import dataExport.XmlEncoder;
 import dataManagement.PeopleManager;
 import dataManagement.Person;
 import dataManagement.Receipt;
