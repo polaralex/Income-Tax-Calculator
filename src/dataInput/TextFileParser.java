@@ -8,7 +8,7 @@ public class TextFileParser extends InputFileParser {
 		super(filename);
 	}
 	
-	void parseReceiptData() {
+	protected void parseReceiptData() {
 		
 		consumeReceipt();
 		
@@ -22,7 +22,6 @@ public class TextFileParser extends InputFileParser {
 	protected String checkForTagData(String tagElement) {
 		
 		getNextWord();
-
 		String currentWord = "";
 		
 		if(word.equals(tagElement+":")){
@@ -30,16 +29,12 @@ public class TextFileParser extends InputFileParser {
 			getNextWord();
 			
 			while( !(word.matches("\\w+:")) && !(word.equals("Receipt")) && !(isEndOfParsedWords()) ){
-				System.out.println("Current word: "+word);
-				System.out.println("Current word building: "+currentWord);
-
 				currentWord = currentWord.concat(" " + word);
 				getNextWord();
 			}
 			
-			goToPreviousWord();
-						
-			return currentWord;
+			goToPreviousWord();	
+			return (currentWord);
 			
 		} else {
 			return null;

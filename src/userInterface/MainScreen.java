@@ -252,7 +252,8 @@ public class MainScreen extends GridBagBasedScreen {
 		
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 						
-			Person importedPerson = InputManager.importPersonFromFile(fileChooser.getSelectedFile());
+			InputManager inputManager = new InputManager();
+			Person importedPerson = inputManager.importPersonFromFile(fileChooser.getSelectedFile());
 			model.addElement(importedPerson);		
 		}
 	}

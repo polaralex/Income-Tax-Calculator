@@ -46,6 +46,9 @@ public abstract class InputFileParser {
 	private Person newPerson;
 	protected ArrayList<Receipt> receiptsList = new ArrayList<Receipt>();
 	
+	protected abstract String checkForTagData(String tagElement);
+	protected abstract void parseReceiptData();
+	
 	public InputFileParser(File filename) {
 		
 		tokenizeInput(filename);
@@ -75,10 +78,6 @@ public abstract class InputFileParser {
 	    
 	    in.close();
 	}
-	
-	protected abstract String checkForTagData(String tagElement);
-	
-	abstract void parseReceiptData();
 	
 	protected void parseReceiptDataCommonCode() {
 		

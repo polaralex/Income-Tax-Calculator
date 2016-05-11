@@ -101,7 +101,7 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		textAreaSurname = new JTextArea(person.getLastName());
 		textIncome = new JTextArea(person.getIncome().toString());
 		textTaxAfterReceipts = new JTextArea(person.calculateFinalTax().toString());
-		personTypeLabel = new JLabel("Category: "+ person.getPersonType());
+		personTypeLabel = new JLabel("Category: "+ person.getPersonCategory());
 		personTypeLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		fileSaveStateLabel = new JLabel("");
 		

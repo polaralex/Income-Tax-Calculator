@@ -33,7 +33,7 @@ public class OutputManager {
 		
 		tagListPersonData.add("Name", person.getFirstName()+" "+person.getLastName());
 		tagListPersonData.add("AFM", person.getIdentifyingNumber().toString());
-		tagListPersonData.add("Status", person.getPersonType());
+		tagListPersonData.add("Status", person.getPersonCategory());
 		tagListPersonData.add("Income", person.getIncome().toString());
 	}
 	

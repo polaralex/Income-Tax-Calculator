@@ -216,7 +216,7 @@ public class Person {
 		this.personType = category;
 	}
 	
-	public String getPersonType(){
+	public String getPersonCategory(){
 		return this.personType;
 	}
 

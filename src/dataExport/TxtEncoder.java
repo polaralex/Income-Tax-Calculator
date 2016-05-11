@@ -14,7 +14,11 @@ public class TxtEncoder extends OutputFileEncoder {
 
 	protected void writeTag(String tagName, String includedData) {
 
-		stringBuilder.append(tagName + ":");
+		if(tagName.equals("ReceiptID")){
+			stringBuilder.append("Receipt ID" + ":");
+		} else {
+			stringBuilder.append(tagName + ":");
+		}
 		stringBuilder.append(" " + includedData + " ");
 		stringBuilder.append(String.format("%n"));
 	}
