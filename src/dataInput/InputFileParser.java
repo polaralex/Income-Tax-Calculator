@@ -20,17 +20,17 @@ import dataManagement.Person;
 import dataManagement.Receipt;
 
 public abstract class InputFileParser {
-	
+
 	// Person data in String form:
 	protected String name = null;
 	protected String afm = null;
 	protected String status = null;
 	protected String income = null;
-	
+
 	// Used for the only different spelling of a tag
 	// between the two inherited classes:
 	protected String receiptId;
-	
+
 	protected ArrayList<String> parsedWords = new ArrayList<String>();
 	protected Integer parsedWordsIterator = 0;
 	protected String word;
@@ -41,22 +41,22 @@ public abstract class InputFileParser {
 	protected String lastname = "empty";
 	protected Integer afmFinal = 00000;
 	protected Double incomeFinal = 00000d;
-	
+
 	// Data to Export:
 	private Person newPerson;
 	protected ArrayList<Receipt> receiptsList = new ArrayList<Receipt>();
-	
+
 	protected abstract String checkForTagData(String tagElement);
 	protected abstract void parseReceiptData();
-	
+
 	public InputFileParser(File filename) {
-		
+
 		tokenizeInput(filename);
 		try {
 			parsePersonData();
 		    parseReceiptData();
 		    newPerson = PeopleManager.createNewPerson(status, firstname, lastname, afmFinal, incomeFinal);
-		    
+
 		    if (!receiptsList.equals(null)){
 				newPerson.addReceiptsList(receiptsList);
 			}
@@ -72,15 +72,15 @@ public abstract class InputFileParser {
 	    in = new BufferedReader(new FileReader(textFile));
 	    String readLine = "";
 	    
-	    while ( (readLine = in.readLine()) != null ) {
+	    while ((readLine = in.readLine()) != null) {
 	    	concatenateInputWordsToBuffer(readLine);
 	    }
-	    
+
 	    in.close();
 	}
-	
+
 	protected void parseReceiptDataCommonCode() {
-		
+
 		String date = checkForTagData("Date").trim();
 		String kind = checkForTagData("Kind").trim();
 		String amount = checkForTagData("Amount").trim();
@@ -105,7 +105,7 @@ public abstract class InputFileParser {
 
 		receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
 	}
-	
+
 	void parsePersonData() {
 
 		name = checkForTagData("Name").trim();
@@ -122,9 +122,9 @@ public abstract class InputFileParser {
 		afmFinal = Integer.parseInt(afm);
 		incomeFinal = Double.parseDouble(income);
 	}
-	
+
 	protected void tokenizeInput (File textFile) {
-		
+
 		BufferedReader in = null;
 		try {
 			parseInputLines(in, textFile);
@@ -134,55 +134,56 @@ public abstract class InputFileParser {
 		    e.printStackTrace();
 		}
 	}
-	
+
 	private void closeInputFile(BufferedReader in){
 		try {
 	        in.close();
 	    } catch (Exception e) {
 	    }
 	}
-	
+
 	private void splitInputLinesToWords(){
 	    if ( readWords != null) {
 	    	String[] splited;
 	        splited = readWords.split("\\s+");
 	        for (String word : splited) {
-	            if (word != null) { 
+	            if (word != null) {
 	            	parsedWords.add(word);
 	            }
 	        }
 	    }
 	}
-	
+
 	private void concatenateInputWordsToBuffer(String readLine) {
     	if (readWords == null) {
     		readWords = readLine;
     	} else {
-    		readWords = readWords+" "+readLine;
+    		readWords = readWords + " " + readLine;
     	}
 	}
-	
+
 	protected void getNextWord() {
 		if (parsedWordsIterator < parsedWords.size()) {
-			
+
 			word = parsedWords.get(parsedWordsIterator);
 			parsedWordsIterator++;
-			
+
 		} else {
 			word = "\0";
 		}
 	}
-	
+
 	protected void goToPreviousWord() {
 		parsedWordsIterator--;
 		word = parsedWords.get(parsedWordsIterator);
 	}
-	
+
 	protected Boolean isEndOfParsedWords() {
-		if(parsedWordsIterator >= parsedWords.size()){
-			return(true);
+
+		if (parsedWordsIterator >= parsedWords.size()) {
+			return (true);
 		} else {
-			return(false);
+			return (false);
 		}
 	}
 	

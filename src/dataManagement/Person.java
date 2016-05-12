@@ -17,27 +17,15 @@ public class Person {
 	private Double income;
 	private String personType;
 	private ArrayList<Receipt> receipts = new ArrayList<Receipt>();
-		
 	private File file = null;
 
 	public Person(String firstName, String lastName, String personType, Integer identifyingNumber, Object income) {
 				
 		this.firstName = firstName;
 		this.lastName = lastName;
-		
-		if (identifyingNumber == 0) {
-			this.identifyingNumber = getRandomId();
-		} else {
-			this.identifyingNumber = identifyingNumber;
-		}
-		
+		setIdentifyingNumber(identifyingNumber);
 		this.personType = personType;
-
-		if (income.getClass() != Double.class) {
-			this.income = ((Integer) income).doubleValue();
-		} else {
-			this.income = (Double) income;
-		}
+		setIncome(income);
 	}
 
 	public Person() {
@@ -48,7 +36,7 @@ public class Person {
 		this.personType = "Single";
 	}
 	
-	private Integer getRandomId(){
+	private Integer getRandomId() {
 		Double idNumberDouble = (Math.random() * (999999999 - 100000000));
 		return idNumberDouble.intValue();
 	}
@@ -188,16 +176,24 @@ public class Person {
 		return identifyingNumber;
 	}
 
-	public void setIdentifyingNumber(Integer identifyingNumber) {
-		this.identifyingNumber = identifyingNumber;
+	public void setIdentifyingNumber(Integer input) {
+		if (input == 0) {
+			this.identifyingNumber = getRandomId();
+		} else {
+			this.identifyingNumber = input;
+		}
 	}
 
 	public Double getIncome() {
 		return income;
 	}
 
-	public void setIncome(Double income) {
-		this.income = income;
+	public void setIncome(Object input){
+		if (input.getClass() != Double.class) {
+			this.income = ((Integer) input).doubleValue();
+		} else {
+			this.income = (Double) input;
+		}
 	}
 
 	public File getFile() {

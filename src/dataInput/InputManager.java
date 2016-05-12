@@ -5,16 +5,15 @@ import dataManagement.PeopleManager;
 import dataManagement.Person;
 
 public class InputManager {
-	
+
 	private String filename;
-	InputFileParser inputFileParser;
-	Person newPerson;
-	
+	private InputFileParser inputFileParser;
+
 	public Person importPersonFromFile(File file) {
 		
 		filename = file.getAbsolutePath();
 		selectCorrectParser();
-								
+
 		try {
 			Person newPerson = inputFileParser.getPerson();
 			newPerson.setFile(file);
@@ -25,14 +24,13 @@ public class InputManager {
 			return (PeopleManager.createNewPerson("Single", "No Name Found", "", 0, 0d));
 		}
 	}
-	
+
 	private void selectCorrectParser() {
 		
-		if( filename.substring(filename.lastIndexOf(".") + 1).equals("xml") ){
+		if (filename.substring(filename.lastIndexOf(".") + 1).equals("xml")){
 			inputFileParser = new XmlParser(new File(filename));
 		} else {
 			inputFileParser = new TextFileParser(new File(filename));
 		}
 	}
-	
 }
