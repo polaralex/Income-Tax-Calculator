@@ -35,8 +35,8 @@ public class ReceiptListModel extends AbstractListModel<String> {
     
     public void addAll(ArrayList<Receipt> receiptList) {
         
-    	for(int i=0; i<receiptList.size(); i++) {
-    		myArrayList.add(receiptList.get(i));
+    	for (Receipt receipt : receiptList) {
+    		myArrayList.add(receipt);
     	}
         fireContentsChanged(this, 0, getSize());
     }

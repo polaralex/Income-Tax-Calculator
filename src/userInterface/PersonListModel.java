@@ -50,13 +50,12 @@ public class PersonListModel extends AbstractListModel<String> {
     	myArrayList.get(position).setIdentifyingNumber(identifyingNumber);
     	myArrayList.get(position).setIncome(income);
         fireIntervalAdded(this, myArrayList.size()-1, myArrayList.size()-1);
-
     }
     
     public void addAll(ArrayList<Person> personList) {
         
-    	for(int i=0; i<personList.size(); i++) {
-    		myArrayList.add(personList.get(i));
+    	for (Person person : personList) {
+    		myArrayList.add(person);
     	}
         fireContentsChanged(this, 0, getSize());
         

@@ -1,6 +1,5 @@
 package userInterface;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,14 +10,11 @@ import dataManagement.Receipt;
 
 public class ReceiptsPanel extends JPanel implements ActionListener {
 	
-	private ArrayList<Receipt> receiptsList;
 	private ReceiptListModel model;
 	private JList<String> list;
 
 	ReceiptsPanel(ArrayList<Receipt> receiptsList) {
-		
-		this.receiptsList = receiptsList;
-				
+						
 		list = new JList<String>();
 		model = new ReceiptListModel(receiptsList);
 		list.setModel(model);
