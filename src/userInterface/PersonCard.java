@@ -110,8 +110,8 @@ public class PersonCard extends GridBagBasedScreen implements ActionListener {
 		buttonClose = new JButton("Close");
 		buttonAddReceipt = new JButton("Add");
 		buttonDeleteReceipt = new JButton("Delete");
-		buttonShowPieChart = new JButton("Tax Chart");
-		buttonShowBarChart = new JButton("Bar Chart");
+		buttonShowPieChart = new JButton("Expenses");
+		buttonShowBarChart = new JButton("Tax Charts");
 		
 		buttonSaveChanges.addActionListener(this);
 		buttonClose.addActionListener(this);

@@ -128,16 +128,16 @@ public class Person {
 
 	public Double calculateFinalTax() {
 
-		Double receiptAmount = calculateReceiptAmount();
 		Double taxBeforeReceipts = calculateTaxBeforeReceipts();
+		Double receiptAmount = calculateReceiptAmount();
 
-		if (receiptAmount >= 0 && receiptAmount < (taxBeforeReceipts * 0.2)) {
+		if (receiptAmount >= 0 && receiptAmount < (income * 0.2)) {
 			return (taxBeforeReceipts + (taxBeforeReceipts * 0.08));
 		}
-		if (receiptAmount < (taxBeforeReceipts * 0.4)) {
+		if (receiptAmount < (income * 0.4)) {
 			return (taxBeforeReceipts + (taxBeforeReceipts * 0.04));
 		}
-		if (receiptAmount < (taxBeforeReceipts * 0.6)) {
+		if (receiptAmount < (income * 0.6)) {
 			return (taxBeforeReceipts - (taxBeforeReceipts * 0.15));
 		}
 		
@@ -148,9 +148,9 @@ public class Person {
 	public Double calculateReceiptAmount() {
 
 		Double receiptsAmount = 0d;
-
-		for (int i = 0; i < receipts.size(); i++) {
-			receiptsAmount = receiptsAmount + receipts.get(i).getAmount();
+		
+		for (Receipt receipt : receipts) {
+			receiptsAmount = receiptsAmount + receipt.getAmount();
 		}
 
 		return (receiptsAmount);
