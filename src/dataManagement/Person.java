@@ -20,7 +20,7 @@ public class Person {
 	private File file = null;
 
 	public Person(String firstName, String lastName, String personType, Integer identifyingNumber, Object income) {
-				
+
 		this.firstName = firstName;
 		this.lastName = lastName;
 		setIdentifyingNumber(identifyingNumber);
@@ -35,85 +35,97 @@ public class Person {
 		this.income = 0d;
 		this.personType = "Single";
 	}
-	
+
 	private Integer getRandomId() {
 		Double idNumberDouble = (Math.random() * (999999999 - 100000000));
 		return idNumberDouble.intValue();
 	}
-	
+
 	public Double calculateTaxBeforeReceipts(){
-		
+
 		if (personType.equals("Single")) {
-			return(calculateTaxSingle());
-		} else if (personType.equals("Head of Household")) {
-			return(calculateTaxHeadOfHousehold());
-		} else if (personType.equals("Married Filing Jointly")) {
-			return(calculateTaxMarriedFilingJointly());
-		} else {
-			return(calculateTaxMarriedFilingSeperately());
+			return (calculateTaxSingle());
 		}
+		if (personType.equals("Head of Household")) {
+			return (calculateTaxHeadOfHousehold());
+		}
+		if (personType.equals("Married Filing Jointly")) {
+			return (calculateTaxMarriedFilingJointly());
+		}
+
+		return (calculateTaxMarriedFilingSeperately());
 	}
 
 	public Double calculateTaxSingle() {
-		
-		if( income >= 0 && income < 24680) {
+
+		if ( income >= 0 && income < 24680) {
 			return ( income * 0.0535d );
-		} else if ( income < 81080 ) {
-			return ( 1320.38 + 0.0705*(income - 24680) );
-		} else if ( income < 90000 ) {
-			return ( 5296.58 + 0.0785*(income - 81080) );
-		} else if ( income < 152540 ) {
-			return ( 5996.80 + 0.0785*(income - 90000) );
-		} else {
-			return ( 10906.19 + 0.0985*(income - 152540) );
 		}
+		if ( income < 81080 ) {
+			return ( 1320.38 + 0.0705*(income - 24680) );
+		}
+		if ( income < 90000 ) {
+			return ( 5296.58 + 0.0785*(income - 81080) );
+		}
+		if ( income < 152540 ) {
+			return ( 5996.80 + 0.0785*(income - 90000) );
+		}
+		
+		return ( 10906.19 + 0.0985*(income - 152540) );
 	}
 	
 	public Double calculateTaxHeadOfHousehold() {
 		
 		if (income >= 0 && income < 30390) {
 			return (income * 0.0535d);
-		} else if (income < 90000) {
-			return (1624.87 + 0.0705 * (income - 30390));
-		} else if (income < 122110) {
-			return (5828.38 + 0.0705 * (income - 90000));
-		} else if (income < 203390) {
-			return (8092.13 + 0.0785 * (income - 122110));
-		} else {
-			return (14472.61 + 0.0985 * (income - 203390));
 		}
+		if (income < 90000) {
+			return (1624.87 + 0.0705 * (income - 30390));
+		} 
+		if (income < 122110) {
+			return (5828.38 + 0.0705 * (income - 90000));
+		}
+		if (income < 203390) {
+			return (8092.13 + 0.0785 * (income - 122110));
+		}
+		return (14472.61 + 0.0985 * (income - 203390));
 	}
 	
 	public Double calculateTaxMarriedFilingJointly() {
 		
-		if( income >= 0 && income < 36080) {
+		if ( income >= 0 && income < 36080) {
 			return ( income * 0.0535d );
-		} else if ( income < 90000 ) {
-			return ( 1930.28 + 0.0705*(income - 36080) );
-		} else if ( income < 143350 ) {
-			return ( 5731.64 + 0.0785*(income - 90000) );
-		} else if ( income < 254240 ) {
-			return ( 9492.82 + 0.0785*(income - 143350) );
-		} else {
-			return ( 18197.69 + 0.0985*(income - 254240) );
 		}
+		if ( income < 90000 ) {
+			return ( 1930.28 + 0.0705*(income - 36080) );
+		}
+		if ( income < 143350 ) {
+			return ( 5731.64 + 0.0785*(income - 90000) );
+		}
+		if ( income < 254240 ) {
+			return ( 9492.82 + 0.0785*(income - 143350) );
+		}
+		
+		return ( 18197.69 + 0.0985*(income - 254240) );
 	}
 	
 	public Double calculateTaxMarriedFilingSeperately() {
 		
 		if (income >= 0 && income < 18040) {
 			return (income * 0.0535d);
-		} else if (income < 71680) {
-			return (965.14 + 0.0705 * (income - 18040));
-		} else if (income < 90000) {
-			return (4746.76 + 0.0785 * (income - 71680));
-		} else if (income < 127120) {
-			return (6184.88 + 0.0785 * (income - 90000));
-		} else {
-			return (9098.80 + 0.0985 * (income - 127120));
 		}
+		if (income < 71680) {
+			return (965.14 + 0.0705 * (income - 18040));
+		}
+		if (income < 90000) {
+			return (4746.76 + 0.0785 * (income - 71680));
+		}
+		if (income < 127120) {
+			return (6184.88 + 0.0785 * (income - 90000));
+		}
+		return (9098.80 + 0.0985 * (income - 127120));
 	}
-	
+
 	public Double calculateFinalTax() {
 
 		Double receiptAmount = calculateReceiptAmount();
@@ -121,13 +133,15 @@ public class Person {
 
 		if (receiptAmount >= 0 && receiptAmount < (taxBeforeReceipts * 0.2)) {
 			return (taxBeforeReceipts + (taxBeforeReceipts * 0.08));
-		} else if (receiptAmount < (taxBeforeReceipts * 0.4)) {
-			return (taxBeforeReceipts + (taxBeforeReceipts * 0.04));
-		} else if (receiptAmount < (taxBeforeReceipts * 0.6)) {
-			return (taxBeforeReceipts - (taxBeforeReceipts * 0.15));
-		} else {
-			return (taxBeforeReceipts - (taxBeforeReceipts * 0.3));
 		}
+		if (receiptAmount < (taxBeforeReceipts * 0.4)) {
+			return (taxBeforeReceipts + (taxBeforeReceipts * 0.04));
+		}
+		if (receiptAmount < (taxBeforeReceipts * 0.6)) {
+			return (taxBeforeReceipts - (taxBeforeReceipts * 0.15));
+		}
+		
+		return (taxBeforeReceipts - (taxBeforeReceipts * 0.3));
 	}
 
 	// This one gives the total amount:

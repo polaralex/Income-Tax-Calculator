@@ -35,9 +35,9 @@ public class XmlParser extends InputFileParser {
 
 			return currentWord;
 
-		} else {
-			return null;
 		}
+
+		return (null);
 	}
 
 	private Boolean isNextWordReceiptId() {
@@ -48,8 +48,8 @@ public class XmlParser extends InputFileParser {
 			parsedWordsIterator = parsedWordsIterator - 2;
 			getNextWord();
 			return (true);
-		} else {
-			return (false);
 		}
+
+		return (false);
 	}
 }

@@ -57,7 +57,6 @@ public class OutputManager {
 	}
 
 	private void doLogFormatExporting(Person person) {
-
 		extractBasicPersonTags(person);
 		extractReceiptCategoryTags(person);
 	}
@@ -130,19 +129,21 @@ public class OutputManager {
 
 		if (type.equals("xml")){
 			return (personToSave.getIdentifyingNumber().toString() + "_INFO.xml");
-		} else if (type.equals("txt")){
-			return (personToSave.getIdentifyingNumber().toString() + "_INFO.txt");
-		} else {
-			return (personToSave.getIdentifyingNumber().toString() + "_LOG.txt");
 		}
+		if (type.equals("txt")){
+			return (personToSave.getIdentifyingNumber().toString() + "_INFO.txt");
+		}
+
+		return (personToSave.getIdentifyingNumber().toString() + "_LOG.txt");
+
 	}
 
 	private String getFileExtension(File file) {
 		String fileName = file.getName();
 		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
 			return fileName.substring(fileName.lastIndexOf(".") + 1);
-		} else {
-			return ("");
 		}
+		
+		return ("");
 	}
 }

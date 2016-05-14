@@ -36,9 +36,9 @@ public class TextFileParser extends InputFileParser {
 			goToPreviousWord();
 			return (currentWord);
 
-		} else {
-			return null;
 		}
+		
+		return (null);
 	}
 
 	private Boolean isNextWordReceiptId() {
@@ -55,11 +55,8 @@ public class TextFileParser extends InputFileParser {
 				return (true);
 			}
 
-		} else {
-
-			return (false);
 		}
-		
+
 		return (false);
 	}
 }

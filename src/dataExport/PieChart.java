@@ -62,7 +62,6 @@ public class PieChart extends JFrame {
 
 		String output = "";
 		output += category + ": " + getTotalCategoryValue(receipts, category) + " $";
-
 		return (output);
 	}
 
