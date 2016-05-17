@@ -14,9 +14,9 @@ import dataManagement.Receipt;
 
 public class OutputManager {
 
-	Person person;
-	TagList tagListPersonData;
-	TagList tagListReceipts;
+	private Person person;
+	private TagList tagListPersonData;
+	private TagList tagListReceipts;
 
 	private void doPersonFormatExporting(Person person) {
 		extractPersonTags(person);

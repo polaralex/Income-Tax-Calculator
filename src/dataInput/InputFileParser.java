@@ -106,7 +106,7 @@ public abstract class InputFileParser {
 		receiptsList.add(new Receipt(receiptIdFinal, dateFinal, categoryFinal, amountFinal, companyFinal));
 	}
 
-	void parsePersonData() {
+	protected void parsePersonData() {
 
 		name = checkForTagData("Name").trim();
 		afm = checkForTagData("AFM").trim();

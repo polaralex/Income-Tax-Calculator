@@ -28,17 +28,20 @@ public class TextFileParser extends InputFileParser {
 
 			getNextWord();
 
-			while(!(word.matches("\\w+:")) && !(word.equals("Receipt")) && !(isEndOfParsedWords())){
+			while(isNextWordValidAndNotReceipt()){
 				currentWord = currentWord.concat(" " + word);
 				getNextWord();
 			}
 
 			goToPreviousWord();
 			return (currentWord);
-
 		}
 		
 		return (null);
+	}
+	
+	private Boolean isNextWordValidAndNotReceipt(){
+		return (!(word.matches("\\w+:")) && !(word.equals("Receipt")) && !(isEndOfParsedWords()));
 	}
 
 	private Boolean isNextWordReceiptId() {

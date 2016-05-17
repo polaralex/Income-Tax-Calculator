@@ -10,10 +10,6 @@ public class PeopleManager {
 
 	private ArrayList<Person> personList = new ArrayList<Person>();
 
-	public ArrayList<Person> getPersonList () {
-		return personList;
-	}
-
 	public static Person createNewPerson (int category, String firstName, String lastName, Integer identifyingNumber, Double income){
 
 		ArrayList<String> categories = new ArrayList<String>();
@@ -70,5 +66,9 @@ public class PeopleManager {
 		}
 		
 		return (new Company(name, address));
+	}
+	
+	public ArrayList<Person> getPersonList () {
+		return personList;
 	}
 }
