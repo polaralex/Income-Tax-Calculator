@@ -13,6 +13,7 @@ It's a working example of using Java with Swing (for UI), a backend data-model a
 5. The XML export can be used as as data storage, since it can be imported using the Main Screen's "Import" button.
 6. Also, every time you change something on a Person that's already been saved, the changes will cascade to the XML file.
 
+# Screenshots of the Application:
 ![The Main Screen](http://i.imgur.com/zvFgbGa.png)
 
 ![The Person-Data Card](http://i.imgur.com/mhMS1Ym.png)
